@@ -1,0 +1,33 @@
+import React from 'react';
+import useMeals from '../hooks/useMeals';
+import MealCard from './MealCard';
+import SectionHeading from './SectionHeading';
+
+const PopularMeals = () => {
+
+
+    const { data, isLoading } = useMeals()
+
+    if (isLoading) {
+        return <span class="loader"></span>
+    }
+
+    const sortedMeals = [...data].sort((a, b) => b.rating - a.rating);
+
+    return (
+        <>
+            <div className='mx-auto max-w-7xl my-4'>
+                <SectionHeading title="Popular Meals" subtitle=""></SectionHeading>
+                <div className='grid grid-cols-3 gap-6'>
+                    {
+                        sortedMeals.map(meal => <MealCard key={meal._id} meal={meal}></MealCard>)
+                    }
+                </div>
+            </div>
+        </>
+    );
+};
+
+
+
+export default PopularMeals;

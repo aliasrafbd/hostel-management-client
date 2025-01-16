@@ -1,14 +1,19 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
-// import { motion } from 'motion/react';
-// import logo from "../../src/assets/share-food-logo.png"
-// import { easeOut } from 'motion';
-// import { FaUser } from "react-icons/fa";
+import { easeOut, motion } from "framer-motion";
+import logo from "../../src/assets/poroshmoni-logo.png"
+import { FaUser } from "react-icons/fa";
 
 const Navbar = () => {
 
-    const {user, logOut} = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
+  const closeDropdown = () => setIsDropdownOpen(false);
 
     // const { pathname } = useLocation();
 
@@ -17,21 +22,20 @@ const Navbar = () => {
     const Links = (<>
 
         <NavLink to="/"><button><li className='py-1 px-3 font-semibold'>Home</li></button></NavLink>
-        {/* <NavLink to="/login"><button><li className='py-1 px-3 font-semibold'>Login</li></button></NavLink>
-        <NavLink to="/register"><button><li className='py-1 px-3 font-semibold'>Register</li></button></NavLink> */}
+        <NavLink to="/meals"><button><li className='py-1 px-3 font-semibold'>Meals</li></button></NavLink>
+        <NavLink to="/upcomingmeals"><button><li className='py-1 px-3 font-semibold'>Upcoming Meals</li></button></NavLink>
+        <NavLink to="/notifications"><button><li className='py-1 px-3 font-semibold'>Notification</li></button></NavLink>
 
         {
-            !user && (<NavLink to="/login"><button><li className='py-1 px-3 font-semibold'>Login</li></button></NavLink>)
-        }
-        {
-            !user && (<NavLink to="/register"><button><li className='py-1 px-3 font-semibold'>Register</li></button></NavLink>)
+            !user && (<NavLink to="/register"><button><li className='py-1 px-3 font-semibold'>Join Us</li></button></NavLink>)
         }
 
     </>)
 
     return (
-        <div className="">
-            <div className="navbar mx-auto max-w-9xl lg:max-w-7xl px-4 lg:px-8 md:px-12 py-8" >
+        <div className="bg-black text-white">
+            <div className="navbar mx-auto max-w-9xl lg:max-w-7xl px-4 lg:px-8 md:px-12">
+                {/* Navbar Start */}
                 <div className="navbar-start">
                     <div className="dropdown mr-6 md:mr-12 lg:mr-0">
                         <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -40,70 +44,84 @@ const Navbar = () => {
                                 className="h-5 w-5"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                stroke="currentColor">
+                                stroke="currentColor"
+                            >
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth="2"
-                                    d="M4 6h16M4 12h8m-8 6h16" />
+                                    d="M4 6h16M4 12h8m-8 6h16"
+                                />
                             </svg>
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                        >
                             {Links}
                         </ul>
                     </div>
-                    <div className='flex flex-col justify-center items-center'>
-                        {/* <motion.img
-                            src={logo}
-
-                            animate={
-                                { x: [0, 50, 0] }
-                            }
-                            transition={
-                                { duration: 8, repeat: Infinity }
-                            }
-
-                            className="max-w-lg w-24 h-24 mb-4 rounded-t-[45px]" />
-                        <motion.h2
-                            animate={
-                                { x: [0, 50, 0] }
-                            }
-                            transition={
-                                { duration: 8, ease: easeOut, repeat: Infinity }
-                            }
-
-                            className="mb-12 text-sm md:text-xl font-bold">Food for <motion.span
-                                animate= {
-                                    { color: ['#33df33', '#33ff66', '#ff6133'], }
-                                }
-                                transition={
-                                    { duration: 1.5, repeat: Infinity }
-                                }
-
-                            >All</motion.span> </motion.h2> */}
+                    <div className="flex flex-col justify-center items-center">
+                        <img className="max-w-lg w-32 h-32 mb-4" src={logo} alt="Logo" />
                     </div>
+                </div>
 
-                </div>
+                {/* Navbar Center */}
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
-                        {Links}
-                    </ul>
+                    <ul className="menu menu-horizontal px-1">{Links}</ul>
                 </div>
-                
+
+                {/* Navbar End */}
                 <div className="navbar-end">
-                    <div className=" flex gap-4 justify-center items-center">
-                        <div className="tooltip tooltip-bottom text-3xl">
-                            {
-                                !user ? "abcd" : <img referrerPolicy='no-referrer' className="md:h-16 md:w-16 h-12 w-12 rounded-full" src={user.photoURL} />
-                            }
-                        </div>
-                        <div>
-                            {
-                                user ? <Link to="/"><button className="" onClick={logOut}>Log Out</button></Link> : <Link to="/login"><button className="">Login</button></Link>
-                            }
-                        </div>
+                    <div className="flex gap-4 justify-center items-center">
+                        {/* Profile Picture and Dropdown */}
+                        {user ? (
+                            <div className="relative">
+                                <img
+                                    referrerPolicy="no-referrer"
+                                    className="md:h-16 md:w-16 h-12 w-12 rounded-full cursor-pointer"
+                                    src={user.photoURL}
+                                    alt="Profile"
+                                    onClick={toggleDropdown}
+                                />
+                                {isDropdownOpen && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                                        <div className="p-4 text-gray-800 border-b border-gray-200">
+                                            <p className="font-semibold">{user.displayName}</p>
+                                        </div>
+                                        <ul className="text-gray-700">
+                                            <li>
+                                                <Link
+                                                    to="/dashboard"
+                                                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                    onClick={closeDropdown}
+                                                >
+                                                    Dashboard
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    onClick={() => {
+                                                        closeDropdown();
+                                                        logOut();
+                                                    }}
+                                                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                >
+                                                    Logout
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="flex justify-center items-center gap-2 tooltip tooltip-bottom text-xl">
+                                <FaUser />
+                                <Link to="/login">
+                                    <button className="text-md font-bold">Login</button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -114,4 +132,4 @@ const Navbar = () => {
 export default Navbar;
 
 
-{/* data-tip={user?.displayName} */}
+{/*  */ }
