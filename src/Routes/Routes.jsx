@@ -19,6 +19,8 @@ import ManageUsers from "../pages/DashBoard/Admin/ManageUsers";
 import ServeMeals from "../pages/DashBoard/Admin/ServeMeals";
 import UpcomingMeals from "../pages/DashBoard/Admin/UpcomingMeals";
 import MyProfile from "../pages/DashBoard/User/MyProfile";
+import AdminRoute from "./AdminRoute";
+import Checkout from "../components/Checkout";
 
 export const router = createBrowserRouter([
   {
@@ -51,13 +53,9 @@ export const router = createBrowserRouter([
         element: <UpcomingMeals></UpcomingMeals>
       },
       {
-        path: '/notifications',
-        element: <div>Notifications</div>
+        path: '/checkout/:packageName',
+        element: <Checkout></Checkout>,
       },
-      {
-        path: '/dashboard',
-        element: <div>Dashboard</div>
-      }
     ]
   },
   {
@@ -68,16 +66,16 @@ export const router = createBrowserRouter([
       // user Routes 
       {
         path: "/dashboard",
-        element: <AllReviews></AllReviews>
+        element: <AdminRoute><AllReviews></AllReviews></AdminRoute>
       },
       {
         path: "myprofile",
-        element: <MyProfile></MyProfile>,
+        element: <AdminRoute><MyProfile></MyProfile></AdminRoute>,
       },
-      {
-        path: "requestedmeals",
-        element: <RequestedMeals></RequestedMeals>,
-      },
+      // {
+      //   path: "requestedmeals",
+      //   element: <RequestedMeals></RequestedMeals>,
+      // },
       {
         path: "paymenthistory",
         element: <PaymentHistory></PaymentHistory>,

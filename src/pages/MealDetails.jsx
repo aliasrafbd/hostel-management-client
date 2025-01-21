@@ -8,6 +8,7 @@ import ReactStars from 'react-rating-stars-component';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 import useMeal from '../hooks/useMeal';
+import Loading from '../components/Loading';
 
 const MealDetails = () => {
 
@@ -18,19 +19,23 @@ const MealDetails = () => {
 
     const { data, isLoading, error, refetch } = useMeal(id)
 
+    if(isLoading) {
+        return <Loading></Loading>
+    }
+
     console.log(data);
 
-    const loadedMeals = useLoaderData();
+    // const loadedMeals = useLoaderData();
 
     const [review, setReview] = useState('');
     const [message, setMessage] = useState('');
     // const [reviewCount, setReviewCount] = useState(0);
     // const [reviews, setReviews] = useState([]);
 
-    const [loadedMeal] = [...loadedMeals].filter(meal => meal._id == id);
+    // const [loadedMeal] = [...loadedMeals].filter(meal => meal._id == id);
 
-    const { _id, price, rating, title, reaction: { count, userEmails } } = loadedMeal;
-    console.log(loadedMeal);
+    
+    const {_id, price, rating, title, reaction: { count, userEmails } } = data;
 
     // including meal image, distributor name, description, ingredients, post time, rating, like button, meal request button, and reviews.
 
@@ -89,7 +94,7 @@ const MealDetails = () => {
         if (review.trim()) {
             try {
                 // Send PUT request to update reviews for the loaded meal using axios
-                const response = await axiosSecure.put(`/api/update-review/${loadedMeal._id}`, {
+                const response = await axiosSecure.put(`/api/update-review/${data._id}`, {
                     review: review,
                 });
                 if (response.data.modifiedCount > 0) {
@@ -112,11 +117,8 @@ const MealDetails = () => {
     };
 
 
-    console.log(loadedMeal);
-
     console.log(count);
 
-    if (!loadedMeal) return <p>Loading meal details...</p>;
     if (!data) return <p>Loading meal details...</p>;
 
     return (
@@ -136,7 +138,7 @@ const MealDetails = () => {
                 }
                 {
                     user && <RequestButton
-                        meal={loadedMeal}
+                        meal={data}
                     // userEmail={user?.email}
                     // initialReaction={reaction}
                     >
@@ -150,7 +152,7 @@ const MealDetails = () => {
                     <p>Meal Rating: {rate?.toFixed(1)}
 
                     </p>
-                    <ReactStars
+                    (<ReactStars
 
                         key={rate} // Use the updated rating state as the key
                         count={5}
@@ -158,7 +160,7 @@ const MealDetails = () => {
                         size={30}
                         edit={false} // Make it read-only
                         activeColor="#ddd700"
-                    />
+                    />) 
                 </div>
                 {/* <div>
                 <button className='btn btn-ghost' onClick={() => handleUpdateRating(4)}>Add Rating: 5</button>
@@ -179,7 +181,7 @@ const MealDetails = () => {
                 {/* Review form */}
                 <div>
                     <textarea
-                        className='input input-bordered w-full'
+                        className='textarea textarea-primary w-full'
                         value={review}
                         onChange={(e) => setReview(e.target.value)}  // Update review state
                         placeholder="Write your review here"
@@ -191,7 +193,7 @@ const MealDetails = () => {
                     <button className='btn btn-secondary block text-center mx-auto my-2' onClick={handleReviewSubmit}>Submit</button>
 
                 <div className={isRatingClicked ? 'hidden' : 'flex gap-2 items-center'}>
-                    <p>Please Rate this meal:</p>
+                    <p>Please Rate this {title}</p>
                     <ReactStars
                         count={5}
                         value={0} // User's initial input value
@@ -204,13 +206,15 @@ const MealDetails = () => {
 
                 {/* Display reviews */}
                 <div>
-                    <h3>Reviews:</h3>
+                    <h3 className='text-center font-bold my-12 text-3xl'>{title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()} Reviews:</h3>
                     {data.reviews.reviews.length > 0 ? (
                         data.reviews.reviews.map((rev, index) => (
                             <div key={index}>
+                                <br />
+                                <span className='font-bold'>{user?.displayName}</span>
                                 <p>{rev.review}</p>
                                 <small>{new Date(rev.createdAt).toLocaleString()}</small>
-                            </div>
+                            </div> 
                         ))
                     ) : (
                         <p>No reviews yet</p>

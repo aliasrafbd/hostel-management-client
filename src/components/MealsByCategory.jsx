@@ -21,9 +21,9 @@ const MealsByCategory = () => {
         return <span class="loader"></span>
     }
 
-    const breakfast = data?.filter((meal) => meal.category === "Breakfast");
-    const lunch = data?.filter((meal) => meal.category === "Lunch");
-    const dinner = data?.filter((meal) => meal.category === "Dinner");
+    const breakfast = data?.data?.filter((meal) => meal.category === "Breakfast");
+    const lunch = data?.data?.filter((meal) => meal.category === "Lunch");
+    const dinner = data?.data?.filter((meal) => meal.category === "Dinner");
 
     console.log(breakfast);
     console.log(lunch);
@@ -64,7 +64,7 @@ const MealsByCategory = () => {
                 <TabPanel>
                     <div className='grid grid-cols-3 gap-6'>
                         {
-                            data.map(meal => <MealCard key={meal._id} meal={meal}></MealCard>)
+                            data?.data?.map(meal => <MealCard key={meal._id} meal={meal}></MealCard>)
                         }
                     </div>
                 </TabPanel>

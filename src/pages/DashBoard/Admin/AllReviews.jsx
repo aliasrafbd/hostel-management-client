@@ -58,7 +58,7 @@ const AllReviews = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {meals?.map((meal) => (
+                            {meals.data?.map((meal) => (
                                 <tr key={meal._id} className="hover:bg-gray-50">
                                     <td className="border border-gray-300 px-4 py-2">{meal.title}</td>
                                     <td className="border border-gray-300 px-4 py-2">{meal.reaction.count}</td>

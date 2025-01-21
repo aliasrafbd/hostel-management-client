@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import SectionHeading from './SectionHeading';
 
 function Packages() {
+    const navigate = useNavigate(); // Initialize navigate
+
     const packages = [
         {
             name: 'Silver',
@@ -26,6 +29,11 @@ function Packages() {
         }
     ];
 
+    // Function to handle navigation
+    const handleRedirect = (packageName) => {
+        navigate(`/checkout/${packageName.toLowerCase()}`);
+    };
+
     return (
         <div className="max-w-7xl mx-auto py-10 px-4">
             <SectionHeading title="Be Premium Member"></SectionHeading>
@@ -33,7 +41,8 @@ function Packages() {
                 {packages.map((pkg) => (
                     <div
                         key={pkg.name}
-                        className={`p-6 rounded-lg shadow-lg ${pkg.bgColor}`}
+                        className={`p-6 rounded-lg shadow-lg ${pkg.bgColor} cursor-pointer`}
+                        onClick={() => handleRedirect(pkg.name)} // Navigate on card click
                     >
                         <h2 className={`text-2xl font-semibold ${pkg.textColor}`}>
                             {pkg.name} Package
@@ -53,6 +62,10 @@ function Packages() {
                             className={`mt-6 px-4 py-2 w-full font-semibold rounded-lg ${
                                 pkg.textColor
                             } border border-current hover:bg-opacity-10`}
+                            onClick={(e) => {
+                                e.stopPropagation(); // Prevent card click from triggering
+                                handleRedirect(pkg.name);
+                            }}
                         >
                             Choose {pkg.name}
                         </button>

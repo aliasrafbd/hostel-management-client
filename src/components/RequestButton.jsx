@@ -72,7 +72,7 @@ const RequestButton = ({ meal }) => {
                     disabled={isRequested}
                     className={`btn my-2 ${isRequested ? 'btn-disabled' : 'btn-primary'}`}
                 >
-                    {isRequested ? 'Requested' : 'Request a Meal'}
+                    {isRequested ? 'Requested' : `Request this ${meal.title}`}
                 </button>
                 
         </div >

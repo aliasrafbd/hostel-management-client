@@ -19,13 +19,9 @@ const Home = () => {
         return <span class="loader"></span>
     }
 
-    const breakfast = data?.filter((meal) => meal.category === "Breakfast");
-    const lunch = data?.filter((meal) => meal.category === "Lunch");
-    const dinner = data?.filter((meal) => meal.category === "Dinner");
-
-    console.log(breakfast);
-    console.log(lunch);
-    console.log(dinner);
+    const breakfast = data?.data?.filter((meal) => meal.category === "Breakfast");
+    const lunch = data?.data?.filter((meal) => meal.category === "Lunch");
+    const dinner = data?.data?.filter((meal) => meal.category === "Dinner");
 
     return (
         <div className='mx-auto max-w-7xl my-4'>

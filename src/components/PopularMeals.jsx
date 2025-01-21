@@ -17,7 +17,7 @@ const PopularMeals = () => {
         return <span class="loader"></span>
     }
 
-    const sortedMeals = [...data].sort((a, b) => b.rating - a.rating);
+    const sortedMeals = [...data.data].sort((a, b) => b.rating - a.rating);
 
     return (
         <>

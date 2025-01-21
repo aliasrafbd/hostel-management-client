@@ -1,23 +1,36 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const fetchMeals = async ({ search, category, minPrice, maxPrice }) => {
-    const response = await axios.get("http://localhost:5000/meals", {
-        params: { search, category, minPrice, maxPrice },
-    });
-    return response.data;
-};
+const useMeals = ({ search, category, minPrice, maxPrice, page, limit }) => {
+    const [data, setData] = useState({ data: [], pagination: {} });
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-const useMeals = ({ search = "", category = "", minPrice = "", maxPrice = "" }) => {
-    const { data = [], isLoading, error, refetch } = useQuery({
-        queryKey: ['meals', search, category, minPrice, maxPrice],
-        queryFn: () => fetchMeals({ search, category, minPrice, maxPrice }),
-        keepPreviousData: true,
-    });
+    useEffect(() => {
+        const fetchMeals = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get("http://localhost:5000/meals", {
+                    params: { search, category, minPrice, maxPrice, page, limit },
+                });
 
-    return { data, isLoading, error, refetch };
+                setData((prevData) => ({
+                    data: page === 1
+                        ? response.data.data // Replace data if it's the first page
+                        : [...prevData.data, ...response.data.data], // Append new data
+                    pagination: response.data.pagination,
+                }));
+            } catch (err) {
+                setError(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchMeals();
+    }, [search, category, minPrice, maxPrice, page, limit]);
+
+    return { data, isLoading, error };
 };
 
 export default useMeals;
-
-
