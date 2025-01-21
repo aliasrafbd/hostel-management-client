@@ -7,13 +7,15 @@ import Loading from './Loading';
 
 const RequestButton = ({ meal }) => {
 
+    console.log(meal);
+    
     const { user } = useContext(AuthContext);
 
-    const [isPremiumMember, isMemberLoading] = usePremiumMember();
+    const [isPremiumMember, isMemberLoading] = usePremiumMember(true);
 
-    if (isMemberLoading) {
-        return <Loading></Loading>
-    }
+    // if (isMemberLoading) {
+    //     return <Loading></Loading>
+    // }
 
     const [isRequested, setIsRequested] = useState(false);
 
@@ -21,7 +23,7 @@ const RequestButton = ({ meal }) => {
 
     const like = meal?.reaction?.count;
 
-    const { reaction, ...extractedMeal } = meal;
+    const { reaction, _id, ...extractedMeal } = meal;
 
     console.log(extractedMeal);
 
@@ -30,7 +32,7 @@ const RequestButton = ({ meal }) => {
         ...extractedMeal,
         userEmail: user?.email,
         name: user?.displayName,
-        like: like,
+        reaction: like,
         status: "pending",
     }
 
@@ -65,29 +67,14 @@ const RequestButton = ({ meal }) => {
 
     return (
         <div>
-            {
-                isPremiumMember ? (<button
+                <button
                     onClick={handleRequestMeal}
                     disabled={isRequested}
-                    className={`btn ${isRequested ? 'btn-disabled' : 'btn-primary'}`}
+                    className={`btn my-2 ${isRequested ? 'btn-disabled' : 'btn-primary'}`}
                 >
                     {isRequested ? 'Requested' : 'Request a Meal'}
-                </button>) : (
-                    <button
-                        onClick={() =>
-                            Swal.fire({
-                                icon: 'info',
-                                title: 'Subscription Required',
-                                text: 'You need to subscribe to request meals.',
-                                confirmButtonText: 'Subscribe Now',
-                            })
-                        }
-                        className="btn btn-secondary"
-                    >
-                        Subscribe Now
-                    </button>
-                )
-            }
+                </button>
+                
         </div >
     );
 };

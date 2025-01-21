@@ -1,17 +1,22 @@
 import React, { createContext, useEffect, useState } from 'react';
 import auth from '../firebase/firebase.init';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
-    const googleProvider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
 export const AuthContext = createContext(null);
 
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
 
     const googleProvider = new GoogleAuthProvider();
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const [search, setSearch] = useState(""); // State for search input
+    const [category, setCategory] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
 
     const createANewUser = (email, password) => {
         setLoading(true);
@@ -46,7 +51,7 @@ const AuthProvider = ({children}) => {
     }
 
 
-    useEffect(() => {	
+    useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             console.log("Current User", currentUser?.email);
@@ -84,6 +89,12 @@ const AuthProvider = ({children}) => {
         logOut,
         googleLogIn,
         updateUserProfile,
+        search, setSearch,
+        category, setCategory,
+        minPrice, setMinPrice,
+        maxPrice, setMaxPrice,
+
+
     }
 
 

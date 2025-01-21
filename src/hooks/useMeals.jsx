@@ -1,19 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const fetchMeals = async () => {
-    const response = await axios.get('http://localhost:5000/meals');
-    return response.data; // Ensure this returns an array
+const fetchMeals = async ({ search, category, minPrice, maxPrice }) => {
+    const response = await axios.get("http://localhost:5000/meals", {
+        params: { search, category, minPrice, maxPrice },
+    });
+    return response.data;
 };
 
-const useMeals = () => {
-    const { data = [], isLoading, error } = useQuery({
-        queryKey: ['data'], // Unique key for caching
-        queryFn: fetchMeals, // Function to fetch meals
+const useMeals = ({ search = "", category = "", minPrice = "", maxPrice = "" }) => {
+    const { data = [], isLoading, error, refetch } = useQuery({
+        queryKey: ['meals', search, category, minPrice, maxPrice],
+        queryFn: () => fetchMeals({ search, category, minPrice, maxPrice }),
+        keepPreviousData: true,
     });
 
-    return { data, isLoading, error };
+    return { data, isLoading, error, refetch };
 };
 
-
 export default useMeals;
+
+

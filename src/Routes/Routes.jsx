@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/meals',
-        element: <div>Meals</div>
+        element: <AllMeals></AllMeals>
       },
       {
         path: '/meal/:id',
@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/upcomingmeals',
-        element: <div>upcoming Meals</div>
+        element: <UpcomingMeals></UpcomingMeals>
       },
       {
         path: '/notifications',

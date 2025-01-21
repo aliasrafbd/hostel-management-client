@@ -2,14 +2,17 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../providers/AuthProvider';
+import { AiFillLike } from "react-icons/ai";
 
-const LikeButton = ({ mealId, userEmail, initialReaction }) => {
+const LikeButton = ({ mealId, userEmails, initialReaction }) => {
 
     const { user } = useContext(AuthContext);
+    console.log(userEmails);
+    const userEmail = user?.email
 
-    const [reactionCount, setReactionCount] = useState(initialReaction?.count || 0);
+    const [reactionCount, setReactionCount] = useState(initialReaction || 0);
     const [hasLiked, setHasLiked] = useState(
-        initialReaction?.userEmails?.includes(userEmail) || false
+        userEmails?.includes(user?.email) || false
     );
 
     const handleLike = async () => {
@@ -36,7 +39,10 @@ const LikeButton = ({ mealId, userEmail, initialReaction }) => {
 
     return (
         <>
-            <p>Like: {reactionCount}</p>
+            <div className='flex items-center gap-1'>
+                <AiFillLike className='' />
+                <p>{reactionCount}</p>
+            </div>
             <button
                 onClick={handleLike}
                 disabled={hasLiked}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useMeals from '../hooks/useMeals';
 import MealCard from './MealCard';
 import SectionHeading from './SectionHeading';
@@ -6,7 +6,12 @@ import SectionHeading from './SectionHeading';
 const PopularMeals = () => {
 
 
-    const { data, isLoading } = useMeals()
+    const [search, setSearch] = useState(""); // State for search input
+    const [category, setCategory] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+
+    const { data, isLoading } = useMeals({ search, category, minPrice, maxPrice })
 
     if (isLoading) {
         return <span class="loader"></span>

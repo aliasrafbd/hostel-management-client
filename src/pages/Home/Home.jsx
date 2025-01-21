@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Banner from '../../components/Banner';
 import MealsByCategory from '../../components/MealsByCategory';
 import useMeals from '../../hooks/useMeals';
@@ -8,12 +8,17 @@ import Packages from '../../components/Packages';
 const Home = () => {
 
 
-    const {data, isLoading} = useMeals()
+    const [search, setSearch] = useState(""); // State for search input
+    const [category, setCategory] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
 
-    if(isLoading) {
+    const { data, isLoading } = useMeals({ search, category, minPrice, maxPrice })
+
+    if (isLoading) {
         return <span class="loader"></span>
     }
-    
+
     const breakfast = data?.filter((meal) => meal.category === "Breakfast");
     const lunch = data?.filter((meal) => meal.category === "Lunch");
     const dinner = data?.filter((meal) => meal.category === "Dinner");
@@ -23,7 +28,7 @@ const Home = () => {
     console.log(dinner);
 
     return (
-        <div className=''>
+        <div className='mx-auto max-w-7xl my-4'>
             <Banner></Banner>
             <MealsByCategory></MealsByCategory>
             <PopularMeals></PopularMeals>

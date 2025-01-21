@@ -10,7 +10,12 @@ const MealsByCategory = () => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
-    const { data, isLoading } = useMeals()
+    const [search, setSearch] = useState(""); // State for search input
+    const [category, setCategory] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+
+    const { data, isLoading } = useMeals({ search, category, minPrice, maxPrice })
 
     if (isLoading) {
         return <span class="loader"></span>

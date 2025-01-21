@@ -1,0 +1,33 @@
+ app.patch('/meals/:id/rating', async (req, res) => {
+            const { id } = req.params;
+            console.log(req.body);
+            const { newRating } = req.body; // Expecting newRating in the request body
+            console.log(newRating);
+
+            try {
+
+                const meal = await mealsCollection.findOne({ _id: new ObjectId(id) });
+
+                console.log(meal);
+                if (meal.rating?.userEmails?.includes(userEmail)) {
+                    return res.status(400).json({ message: 'User has already rated this meal' });
+                }
+
+                // Update the reaction count and add the user's email to the reaction list
+                const updatedRating = {
+                    rating: (newRating),
+                    userEmails: [...(meal.reaction?.userEmails || []), userEmail],
+                };
+
+                console.log(updatedRating);
+
+                await mealsCollection.updateOne(
+                    { _id: new ObjectId(id) },
+                    { $set: { rating: updatedRating } }
+                );
+
+                res.status(200).json(updatedMeal);
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });

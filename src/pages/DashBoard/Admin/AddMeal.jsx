@@ -3,25 +3,12 @@ import SectionHeading from '../../../components/SectionHeading';
 import { useForm } from 'react-hook-form';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
-import { imageUpload } from '../../../api/utils';
 import { AuthContext } from '../../../providers/AuthProvider';
-
-// Form to add meal details including - 
-// title, category, image, ingredients, description, price, and post time
-// incorporate an image uploading feature and consider using ImageBB for this purpose.
-// distributor name, and email (logged in admin’s name and email) [make the fields readonly]
-// Initially, rating and likes will be set to 0, and the reviews_count will be 0.
-// Implement react-hook-form for form handling.
-
-
-// const imgHostingApiKey = import.meta.env.VITE_imgbb_hosting_key;
-// const imgHostingApi = `https://api.imgbb.com/1/upload?key=${imgHostingApiKey}`
-
+import { imageUpload } from '../../../api/utils';
 
 const AddMeal = () => {
 
-
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     // const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
@@ -52,21 +39,33 @@ const AddMeal = () => {
     const onSubmit = async (data) => {
         const formattedPostTime = data.postTime.replace("T", " "); // Replace "T" with a space
 
-        const imageURL = await imageUpload(data.image[0]);
-        console.log(imageURL);
+            const imageFile = data.image[0]; // Ensure this is a valid File object
+
+            const imageURL = await imageUpload(imageFile);
+            console.log('Uploaded Image URL:', imageURL);
 
         console.log(data);
 
         const { price, image, ...newData } = data;
         console.log(newData);
 
+        const reaction = {
+            count: 0,
+            userEmails: []
+        }
+
+        const reviews = {
+            review_count: 0,
+            reviews: [],
+        }
+
         // now send the the add meal data with the image url 
         const mealData = {
             ...newData,
             price: parseInt(price),
             image: imageURL,
-            reaction: 0,
-            review: 0,
+            reaction: reaction,
+            reviews: reviews,
             rating: 0,
         }
         console.log(mealData);
@@ -89,6 +88,7 @@ const AddMeal = () => {
         <div className='w-[90%] mx-auto my-6'>
             <SectionHeading title="Add a Meal"></SectionHeading>
             <form onSubmit={handleSubmit(onSubmit)} className="gap-2 grid grid-cols-2">
+            
                 {/* Title */}
                 <div>
                     <label className="block mb-2 text-sm font-medium text-gray-700">Title</label>
