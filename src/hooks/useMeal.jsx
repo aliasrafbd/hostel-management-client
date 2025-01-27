@@ -3,9 +3,11 @@ import axios from 'axios';
 
 // Fetch function to get a single meal by its ID
 const fetchMealById = async (mealId) => {
-  const response = await axios.get(`http://localhost:5000/meal/${mealId}`);
-  return response.data;
-};
+    console.log(`Frontend URL: https://hostel-management-server-orcin.vercel.app/meal/${mealId}`); // Debug the URL
+    const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/meal/${mealId}`);
+    return response.data;
+  };
+  
 
 // Custom hook to get a single meal
 const useMeal = (mealId) => {

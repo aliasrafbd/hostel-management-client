@@ -4,15 +4,20 @@ import useAdmin from '../../../hooks/useAdmin';
 import { useLocation } from 'react-router-dom';
 import MealsTable from '../../../components/MealsTable';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Loading from '../../../components/Loading';
+import axios from 'axios';
+import UpdateMealWithModal from '../../../components/UpdateMealWithModal';
+import MealCard from '../../../components/MealCard';
 
 const AllMeals = () => {
     const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced search state
+    const [debouncedSearch, setDebouncedSearch] = useState("");
     const [category, setCategory] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [page, setPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectedInput, setSelectedInput] = useState('input1');
 
     const { data, isLoading, error } = useMeals({
         search: debouncedSearch,
@@ -22,19 +27,27 @@ const AllMeals = () => {
         page,
         limit: 10,
     });
-    const [isAdmin, isAdminLoading] = useAdmin();
-    const { pathname } = useLocation();
+
+    const { pathname } = useLocation(); // To detect the current route
+
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/meals/search?q=${searchTerm}`);
+            setSearchResults(response.data);
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    };
 
     const meals = data?.data || [];
     const pagination = data?.pagination || {};
 
-    // Debounce the search input
     useEffect(() => {
         const timer = setTimeout(() => {
-            setDebouncedSearch(search); // Update debouncedSearch after 500ms
-        }, 500);
+            setDebouncedSearch(search);
+        }, 1000);
 
-        return () => clearTimeout(timer); // Cleanup the timer on unmount or input change
+        return () => clearTimeout(timer);
     }, [search]);
 
     const loadMoreMeals = () => {
@@ -43,33 +56,22 @@ const AllMeals = () => {
         }
     };
 
-    if (isLoading && page === 1) {
-        return <Loading></Loading>
-    }
+    const handleUpdateClick = (meal) => {
+        setSelectedMeal(meal); // Set the selected meal
+        setModalOpen(true); // Open the modal
+    };
 
     if (error) {
         return <div>Error loading meals: {error.message}</div>;
     }
 
-    // if (!isLoading && meals.length === 0) {
-    //     return <p>No meals found</p>;
-    // }
-
     return (
         <>
-            {pathname !== "/dashboard/allmeals" ? (
+            {pathname === '/dashboard/allmeals' ? (
+                <MealsTable />
+            ) : (
                 <div className="mx-auto max-w-7xl my-4">
                     <div className="mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search meals..."
-                            className="input mr-2 input-bordered w-full max-w-md mb-2"
-                            value={search}
-                            onChange={(e) => {
-                                setPage(1);
-                                setSearch(e.target.value); // Update the search input
-                            }}
-                        />
                         <select
                             className="select select-bordered w-full max-w-md mb-2"
                             value={category}
@@ -83,6 +85,9 @@ const AllMeals = () => {
                             <option value="Lunch">Lunch</option>
                             <option value="Dinner">Dinner</option>
                         </select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                         <div>
                             <p className="my-4">Sort by Price:</p>
                             <div className="flex gap-4">
@@ -108,42 +113,70 @@ const AllMeals = () => {
                                 />
                             </div>
                         </div>
+
+                        <div>
+                            <div className="flex items-center mb-4">
+                                <p className="mr-4">Search by:</p>
+                                <select
+                                    className="select select-bordered w-full max-w-xs"
+                                    value={selectedInput}
+                                    onChange={(e) => setSelectedInput(e.target.value)}
+                                >
+                                    <option value="input1">Regular Search</option>
+                                    <option value="input2">Indexing Search</option>
+                                </select>
+                            </div>
+
+                            {selectedInput === 'input1' ? (
+                                <input
+                                    type="text"
+                                    placeholder="Search meals..."
+                                    className="input input-bordered w-[95%] mb-2"
+                                    value={search}
+                                    onChange={(e) => {
+                                        setPage(1);
+                                        setSearch(e.target.value);
+                                    }}
+                                />
+                            ) : (
+                                <div className="flex items-center w-[95%]">
+                                    <input
+                                        type="text"
+                                        placeholder="Search meals..."
+                                        className="input input-bordered w-full"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                    <button
+                                        className="btn btn-primary ml-2"
+                                        onClick={handleSearch}
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    {meals.length > 0 ?
-                        (
-                            <InfiniteScroll
-                                dataLength={meals.length}
-                                next={loadMoreMeals}
-                                hasMore={pagination.page < pagination.totalPages}
-                                loader={<p>Loading more meals...</p>}
-                            // endMessage={<p>No more meals to load</p>}
-                            >
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    {meals.map((meal) => (
-                                        <div key={meal._id} className="card bg-base-100 shadow-md">
-                                            <figure>
-                                                <img
-                                                    src={meal.image}
-                                                    alt={meal.title}
-                                                    className="w-full h-48 object-cover"
-                                                />
-                                            </figure>
-                                            <div className="card-body">
-                                                <h2 className="card-title">{meal.title}</h2>
-                                                <p>{meal.description}</p>
-                                                <p className="text-lg font-bold">${meal.price}</p>
-                                                <p>Category: {meal.category}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </InfiniteScroll>
-                        ) : (<p className='text-center text-red-500 font-extrabold text-3xl my-28'>No Meals Found named: <span className='text-green-700'>{search}</span></p>)
-                    }
+                    {meals.length > 0 ? (
+                        <InfiniteScroll
+                            dataLength={meals.length}
+                            next={loadMoreMeals}
+                            hasMore={pagination.page < pagination.totalPages}
+                            loader={<p className='text-center py-4'>Loading more meals...</p>}
+                        >
+                            <div className="grid grid-cols-1 md:grid-cols-3 my-4 gap-4">
+                                {(searchResults.length ? searchResults : meals).map((meal) => (
+                                    <MealCard key={meal._id} meal={meal}></MealCard>
+                                ))}
+                            </div>
+                        </InfiniteScroll>
+                    ) : (
+                        <p className="text-center text-red-500 font-extrabold text-3xl my-28">
+                            No Meals Found named: <span className="text-green-700">{search}</span>
+                        </p>
+                    )}
                 </div>
-            ) : (
-                <MealsTable />
             )}
         </>
     );

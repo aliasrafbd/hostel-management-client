@@ -4,7 +4,7 @@ import axios from 'axios';
 // Function to fetch requested meals by name and userEmail
 const fetchRequestedMeals = async ({ name, userEmail }) => {
     try {
-        const response = await axios.get("http://localhost:5000/requestedmeals", {
+        const response = await axios.get("https://hostel-management-server-orcin.vercel.app/requestedmeals", {
             params: { name, userEmail },
         });
         return response.data;
@@ -30,6 +30,7 @@ const useServedMeals = ({ name = "", userEmail = "" }) => {
         ...item,
         status: item.status === "pending" ? "delivered" : item.status,
     }));
+    
 
     return { data: updatedData, isLoading, error, refetch };
 };

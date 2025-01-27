@@ -5,12 +5,12 @@ import { AuthContext } from '../../../providers/AuthProvider';
 
 const AdminProfile = () => {
     const axiosSecure = useAxiosSecure();
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const { data: adminData, isLoading, isError, error } = useQuery({
         queryKey: ['adminData'],
         queryFn: async () => {
-            const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`);
+            const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`, { withCredentials: true });
             return response.data;
         },
         enabled: !!user?.email, // Ensure the query only runs if adminId is provided
@@ -26,16 +26,26 @@ const AdminProfile = () => {
     }
 
     return (
-        <div className="card w-96 bg-base-100 shadow-xl">
-            <figure>
-                <img src={user?.photoURL} alt={`${user?.displayName}'s profile`} className="w-24 h-24 rounded-full mt-4" />
-            </figure>
-            <div className="card-body">
-                <h2 className="card-title text-center">{user?.displayName}</h2>
-                <p className="text-center">{user?.email}</p>
-                <p className="text-center font-bold">Meals Added: {adminData?.mealCount}</p>
+        <div className="card w-96 mx-auto mt-6 pt-20 bg-gradient-to-r from-blue-50 to-blue-100 shadow-2xl rounded-xl overflow-hidden">
+            <div className="flex flex-col items-center -mt-14">
+                <div className="w-28 h-28 rounded-full border-4 border-white shadow-md overflow-hidden">
+                    <img
+                        src={user?.photoURL}
+                        className="object-cover w-full h-full"
+                    />
+                </div>
+                <div className="mt-4 text-center">
+                    <h2 className="text-xl font-bold text-gray-800">{user?.displayName}</h2>
+                    <p className="text-gray-500">{user?.email}</p>
+                </div>
+            </div>
+            <div className="card-body mt-4">
+                <p className="text-center font-bold text-lg text-gray-700">
+                    Meals Added: <span className="text-blue-600">{adminData?.mealCount}</span>
+                </p>
             </div>
         </div>
+
     );
 };
 

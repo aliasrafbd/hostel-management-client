@@ -3,21 +3,21 @@ import useMeals from '../hooks/useMeals';
 import MealCard from './MealCard';
 import SectionHeading from './SectionHeading';
 
-const PopularMeals = () => {
+const PopularMeals = ({meals, isLoading, error}) => {
 
 
-    const [search, setSearch] = useState(""); // State for search input
-    const [category, setCategory] = useState("");
-    const [minPrice, setMinPrice] = useState("");
-    const [maxPrice, setMaxPrice] = useState("");
+    // const [search, setSearch] = useState(""); // State for search input
+    // const [category, setCategory] = useState("");
+    // const [minPrice, setMinPrice] = useState("");
+    // const [maxPrice, setMaxPrice] = useState("");
 
-    const { data, isLoading } = useMeals({ search, category, minPrice, maxPrice })
+    // const { data, isLoading } = useMeals({ search, category, minPrice, maxPrice })
 
     if (isLoading) {
         return <span class="loader"></span>
     }
 
-    const sortedMeals = [...data.data].sort((a, b) => b.rating - a.rating);
+    const sortedMeals = [...meals].sort((a, b) => b.rating - a.rating);
 
     return (
         <>

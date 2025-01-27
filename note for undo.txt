@@ -1,33 +1,643 @@
- app.patch('/meals/:id/rating', async (req, res) => {
-            const { id } = req.params;
-            console.log(req.body);
-            const { newRating } = req.body; // Expecting newRating in the request body
-            console.log(newRating);
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import AddMealWithModal from '../../../components/AddMealWithModal';
+import { useUpcomingMeals } from '../../../hooks/useUpcomingMeals';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
-            try {
+const UpcomingMeals = () => {
+    const { pathname } = useLocation();
+    const axiosSecure = useAxiosSecure();
 
-                const meal = await mealsCollection.findOne({ _id: new ObjectId(id) });
+    const { data: upcomingMeals, isLoading, error, refetch } = useUpcomingMeals();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-                console.log(meal);
-                if (meal.rating?.userEmails?.includes(userEmail)) {
-                    return res.status(400).json({ message: 'User has already rated this meal' });
-                }
+    const queryClient = useQueryClient();
 
-                // Update the reaction count and add the user's email to the reaction list
-                const updatedRating = {
-                    rating: (newRating),
-                    userEmails: [...(meal.reaction?.userEmails || []), userEmail],
-                };
+    // Get liked meals from localStorage
+    const [likedMeals, setLikedMeals] = useState(() => {
+        const saved = localStorage.getItem('likedMeals');
+        return saved ? JSON.parse(saved) : [];
+    });
 
-                console.log(updatedRating);
+    // Update localStorage whenever likedMeals changes
+    useEffect(() => {
+        localStorage.setItem('likedMeals', JSON.stringify(likedMeals));
+    }, [likedMeals]);
 
-                await mealsCollection.updateOne(
-                    { _id: new ObjectId(id) },
-                    { $set: { rating: updatedRating } }
-                );
+    // Mutation to handle likes
+    const likeMeal = useMutation({
+        mutationFn: async (id) => {
+            const response = await axiosSecure.post(`/meals/${id}/like`);
+            return response.data;
+        },
+        onSuccess: (data, variables) => {
+            // Add the meal ID to the likedMeals state
+            setLikedMeals((prev) => [...prev, variables]);
+            queryClient.invalidateQueries(['upcomingMeals']);
+        },
+    });
 
-                res.status(200).json(updatedMeal);
-            } catch (error) {
-                res.status(500).json({ error: error.message });
-            }
-        });
+    const handleLike = (id) => {
+        if (!likedMeals.includes(id)) {
+            likeMeal.mutate(id);
+        }
+    };
+
+    const handleAddMealClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
+
+    
+
+
+    return (
+        <div>
+            <h1 className="text-2xl font-bold">Upcoming Meals</h1>
+            <div className="grid grid-cols-3 gap-6">
+                {upcomingMeals.map((meal) => (
+                    <div key={meal._id} className="card bg-base-100 shadow-md">
+                        <figure>
+                            <img
+                                src={meal.image}
+                                alt={meal.title}
+                                className="w-full h-48 object-cover"
+                            />
+                        </figure>
+                        <div className="card-body">
+                            <h2 className="card-title">{meal.title}</h2>
+                            <p>{meal.description}</p>
+                            <p className="text-lg font-bold">${meal.price}</p>
+                            <p>Category: {meal.category}</p>
+                            <div className="mt-4">
+                                <button
+                                    className="btn btn-outline btn-primary"
+                                    onClick={() => handleLike(meal._id)}
+                                    disabled={likedMeals.includes(meal._id) || likeMeal.isLoading}
+                                >
+                                    {likedMeals.includes(meal._id) ? 'Liked' : 'Like'}
+                                </button>
+                                <p className="mt-2 text-gray-600">
+                                    {meal.reaction} {meal.reaction === 1 ? 'Like' : 'Likes'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <button
+                className="btn btn-primary mt-4"
+                onClick={handleAddMealClick}
+            >
+                Add Meal
+            </button>
+
+            {isModalOpen && (
+                <AddMealWithModal
+                    closeModal={closeModal}
+                    refetch={refetch}
+                />
+            )}
+        </div>
+    );
+};
+
+export default UpcomingMeals;
+
+
+
+
+
+
+
+const _id = data?._id;
+    const title = data?.title;
+    const category = data?.category;
+    const ingredients = data?.ingredients;
+    const description = data?.description;
+    const postTime = data?.postTime;
+    const distributorName = data?.distributorName;
+    const distributorEmail = data?.distributorEmail;
+    const price = data?.price;
+    const image = data?.image;
+    const reactionCount = data?.reaction?.count;
+    const reactionUserEmails = data?.reaction?.userEmails;
+    const initialReviewCount = data?.reviews?.review_count;
+    const allReviews = data?.reviews?.reviews;
+    const rating = data?.rating;
+    
+    console.log(rating, id, title, category, ingredients, description, postTime, distributorEmail, distributorName, price, image, reactionCount, reactionUserEmails, initialReviewCount, allReviews);
+
+
+
+
+if (isLoading || data.length < 0) {
+        return <Loading></Loading>
+    }
+
+
+still pagination is vertically ups and down. when i have 10 rows, it is moving to bottom of the page, when i have one row, it is moving towards to up. i do not want it. i want to fix it in same place all the time
+
+
+
+const UpdateMealModal = ({ meal, isOpen, onClose, onUpdate }) => {
+    const [formData, setFormData] = useState(meal || {});
+
+    useEffect(() => {
+        setFormData(meal || {});
+    }, [meal]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`https://hostel-management-server-orcin.vercel.app/meals/${meal._id}`, formData); // Update meal
+            onUpdate(); // Refresh data
+            onClose(); // Close modal
+        } catch (error) {
+            console.error('Error updating meal:', error);
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                <h2 className="text-2xl font-bold mb-4">Update Meal</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium">Title</label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={formData.title || ''}
+                            onChange={handleChange}
+                            className="input input-bordered w-full"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium">Category</label>
+                        <select
+                            name="category"
+                            value={formData.category || ''}
+                            onChange={handleChange}
+                            className="select select-bordered w-full"
+                            required
+                        >
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium">Price</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={formData.price || ''}
+                            onChange={handleChange}
+                            className="input input-bordered w-full"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium">Description</label>
+                        <textarea
+                            name="description"
+                            value={formData.description || ''}
+                            onChange={handleChange}
+                            className="textarea textarea-bordered w-full"
+                            rows="3"
+                            required
+                        />
+                    </div>
+                    <div className="flex justify-end gap-4">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>
+                            Cancel
+                        </button>
+                        <button type="submit" className="btn btn-primary">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import AddMealWithModal from '../../../components/AddMealWithModal';
+import LikeButtonUpcomingMeal from '../../../components/LikeButtonUpcomingMeal';
+import SectionHeading from '../../../components/SectionHeading';
+import MealCard from '../../../components/MealCard';
+
+const UpcomingMeals = () => {
+    const { pathname } = useLocation();
+    const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
+    const [upcomingMealsCount, setUpcomingMealsCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const closeModal = () => setIsModalOpen(false);
+
+    // Fetch total count for pagination
+    useEffect(() => {
+        const fetchCount = async () => {
+            const response = await axiosSecure.get('/upcomingmealscount');
+            setUpcomingMealsCount(response.data.count);
+        };
+        fetchCount();
+    }, [axiosSecure]);
+
+    const numberOfPages = Math.ceil(upcomingMealsCount / itemsPerPage);
+    const pages = [...Array(numberOfPages).keys()];
+
+    // Fetch meals
+    const { data: upcomingMeals = [], isLoading, refetch } = useQuery({
+        queryKey: ['upcomingmeals', { currentPage, itemsPerPage }],
+        queryFn: async ({ queryKey }) => {
+            const [, { currentPage, itemsPerPage }] = queryKey;
+            const response = await axiosSecure.get(
+                `/upcomingmeals?page=${currentPage - 1}&size=${itemsPerPage}`
+            );
+            return response.data;
+        },
+        // staleTime: 10000,
+        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+    });
+
+    // Fetch all upcoming meals (no pagination)
+    const { data: upcomingMealsAll = [], isLoading: isLoadingAllUpcoming, refetch: refetchAllUpcoming } = useQuery({
+        queryKey: ['upcomingmealsall'], // Removed pagination parameters from queryKey
+        queryFn: async () => {
+            const response = await axiosSecure.get(`/upcomingmealsall`); // Endpoint without pagination parameters
+            return response.data;
+        },
+        // staleTime: 10000,
+        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+    });
+
+    console.log(upcomingMeals);
+    // if (isLoading) return <div>Loading...</div>;
+
+    // Publish meal mutation
+    const publishMeal = useMutation({
+        mutationFn: async (id) => {
+            const response = await axiosSecure.post(`/publish-meal/${id}`);
+            return response.data;
+        },
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Meal Published!',
+                text: 'The meal has been successfully published.',
+            });
+            queryClient.invalidateQueries(['upcomingmeals']);
+            refetch(); // Refetch meals after publishing
+            refetchAllUpcoming();
+        },
+    });
+
+    const handleReactionUpdate = (meal, newReactionCount) => {
+        if (newReactionCount === 1) {
+            publishMeal.mutate(meal._id);
+        }
+    };
+
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < numberOfPages) setCurrentPage(currentPage + 1);
+    };
+
+
+    return (
+        <div className="max-w-7xl mx-auto">
+            <SectionHeading title="Upcoming Meals"></SectionHeading>
+            {isModalOpen && <AddMealWithModal closeModal={closeModal} refetch={refetch} />}
+
+            {/* Table or Card Layout */}
+            {pathname === '/dashboard/upcomingmeals' ? (
+                <>
+
+                    <div className="flex flex-col h-full">
+                        {/* Table Container */}
+                        <div className="h-[500px] overflow-x-auto">
+                            <table className="table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Reaction Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {upcomingMeals.map((meal, index) => (
+                                        <tr key={meal._id}>
+                                            <td>{index + 1}</td>
+                                            <td>{meal.title}</td>
+                                            <td>{meal.category}</td>
+                                            <td>{meal.reaction?.count}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-success"
+                                                    onClick={() => publishMeal.mutate(meal._id)}
+                                                >
+                                                    Publish
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Add Meal Button */}
+                        <div className="mt-4">
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                Add Meal
+                            </button>
+                        </div>
+
+                        {/* Fixed Pagination */}
+                        <div className="sticky bottom-0 bg-white border-t mt-4 flex justify-center gap-2 py-2">
+                            <button
+                                className="btn btn-secondary"
+                                disabled={currentPage === 1}
+                                onClick={handlePrevPage}
+                            >
+                                Previous
+                            </button>
+                            {pages.map((page) => (
+                                <button
+                                    key={page}
+                                    className={`btn ${currentPage === page + 1 ? "btn-active" : "btn-outline"
+                                        }`}
+                                    onClick={() => setCurrentPage(page + 1)}
+                                >
+                                    {page + 1}
+                                </button>
+                            ))}
+                            <button
+                                className="btn btn-secondary"
+                                disabled={currentPage === numberOfPages}
+                                onClick={handleNextPage}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </>
+            ) : (
+                <div className="grid grid-cols-3 mb-8 gap-6 mt-6">
+                    {upcomingMealsAll.map((meal) => (
+                        <MealCard key={meal._id} meal={meal}></MealCard>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default UpcomingMeals;
+
+
+
+
+
+
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import AddMealWithModal from '../../../components/AddMealWithModal';
+import LikeButtonUpcomingMeal from '../../../components/LikeButtonUpcomingMeal';
+import SectionHeading from '../../../components/SectionHeading';
+
+const UpcomingMeals = () => {
+    const { pathname } = useLocation();
+    const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
+    const [upcomingMealsCount, setUpcomingMealsCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const closeModal = () => setIsModalOpen(false);
+
+    // Fetch total count for pagination
+    useEffect(() => {
+        const fetchCount = async () => {
+            const response = await axiosSecure.get('/upcomingmealscount');
+            setUpcomingMealsCount(response.data.count);
+        };
+        fetchCount();
+    }, [axiosSecure]);
+
+    const numberOfPages = Math.ceil(upcomingMealsCount / itemsPerPage);
+    const pages = [...Array(numberOfPages).keys()];
+
+    // Fetch meals
+    const { data: upcomingMeals = [], isLoading, refetch } = useQuery({
+        queryKey: ['upcomingmeals', { currentPage, itemsPerPage }],
+        queryFn: async ({ queryKey }) => {
+            const [, { currentPage, itemsPerPage }] = queryKey;
+            const response = await axiosSecure.get(
+                `/upcomingmeals?page=${currentPage - 1}&size=${itemsPerPage}`
+            );
+            return response.data;
+        },
+        // staleTime: 10000,
+        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+    });
+
+
+    // if (isLoading) return <div>Loading...</div>;
+
+    // Publish meal mutation
+    const publishMeal = useMutation({
+        mutationFn: async (id) => {
+            const response = await axiosSecure.post(`/publish-meal/${id}`);
+            return response.data;
+        },
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Meal Published!',
+                text: 'The meal has been successfully published.',
+            });
+            queryClient.invalidateQueries(['upcomingmeals']);
+            refetch(); // Refetch meals after publishing
+        },
+    });
+
+    const handleReactionUpdate = (meal, newReactionCount) => {
+        if (newReactionCount === 1) {
+            publishMeal.mutate(meal._id);
+        }
+    };
+
+    const handleItemsPerPage = (e) => {
+        setItemsPerPage(parseInt(e.target.value, 10));
+        setCurrentPage(1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < numberOfPages) setCurrentPage(currentPage + 1);
+    };
+
+
+    return (
+        <div className="max-w-7xl mx-auto">
+            <SectionHeading title="Upcoming Meals"></SectionHeading>
+            {isModalOpen && <AddMealWithModal closeModal={closeModal} refetch={refetch} />}
+
+            {/* Table or Card Layout */}
+            {pathname === '/dashboard/upcomingmeals' ? (
+                <>
+
+                    <div className="flex flex-col h-full">
+                        {/* Table Container */}
+                        <div className="h-[500px] overflow-x-auto">
+                            <table className="table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Reaction Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {upcomingMeals.map((meal, index) => (
+                                        <tr key={meal._id}>
+                                            <td>{index + 1}</td>
+                                            <td>{meal.title}</td>
+                                            <td>{meal.category}</td>
+                                            <td>{meal.reaction?.count}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Add Meal Button */}
+                        <div className="mt-4">
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                Add Meal
+                            </button>
+                        </div>
+
+                        {/* Fixed Pagination */}
+                        <div className="sticky bottom-0 bg-white border-t mt-4 flex justify-center gap-2 py-2">
+                            <button
+                                className="btn btn-secondary"
+                                disabled={currentPage === 1}
+                                onClick={handlePrevPage}
+                            >
+                                Previous
+                            </button>
+                            {pages.map((page) => (
+                                <button
+                                    key={page}
+                                    className={`btn ${currentPage === page + 1 ? "btn-active" : "btn-outline"
+                                        }`}
+                                    onClick={() => setCurrentPage(page + 1)}
+                                >
+                                    {page + 1}
+                                </button>
+                            ))}
+                            <button
+                                className="btn btn-secondary"
+                                disabled={currentPage === numberOfPages}
+                                onClick={handleNextPage}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+
+                </>
+            ) : (
+                <div className="grid grid-cols-3 gap-6 mt-6">
+                    {upcomingMeals.map((meal) => (
+                        <div key={meal._id} className="card bg-base-100 shadow-md">
+                            <figure>
+                                <img
+                                    src={meal.image}
+                                    alt={meal.title}
+                                    className="w-full h-48 object-cover"
+                                />
+                            </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">{meal.title}</h2>
+                                <p>{meal.description}</p>
+                                <p className="text-lg font-bold">${meal.price}</p>
+                                <p>Category: {meal.category}</p>
+                                <div className="mt-4">
+                                    <LikeButtonUpcomingMeal
+                                        meal={meal}
+                                        userEmails={meal.reaction?.userEmails || []}
+                                        initialReaction={meal.reaction?.count || 0}
+                                        onReactionUpdate={(newCount) =>
+                                            handleReactionUpdate(meal, newCount)
+                                        }
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default UpcomingMeals;

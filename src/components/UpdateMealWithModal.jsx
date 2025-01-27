@@ -1,14 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { AuthContext } from "../providers/AuthProvider";
 import { imageUpload } from "../api/utils";
 
-const AddMealWithModal = ({ closeModal, refetch }) => {
+const UpdateMealWithModal = ({ closeModal, refetch }) => {
 
     const axiosSecure = useAxiosSecure();
-    const [buttonText, setButtonText] = useState('Add');
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
@@ -26,8 +25,6 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
 
 
     const onSubmit = async (data) => {
-        setButtonText('Adding');
-
         try {
             // Upload the image and get the URL
             console.log(data);
@@ -179,11 +176,9 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
                         <button type="button" className="btn" onClick={closeModal}>
                             Cancel
                         </button>
-                        <div className='col-span-2 mx-auto'>
-                            <button type="submit" className="btn btn-primary w-xsm" disabled={buttonText === 'Adding'}>
-                                {buttonText} {/* Display button text */}
-                            </button>
-                        </div>
+                        <button type="submit" className="btn btn-primary">
+                            Add Meal
+                        </button>
                     </div>
                 </form>
             </div>
@@ -191,4 +186,4 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
     );
 };
 
-export default AddMealWithModal;
+export default UpdateMealWithModal;

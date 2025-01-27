@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import auth from '../firebase/firebase.init';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import axios from 'axios';
 const googleProvider = new GoogleAuthProvider();
 
 export const AuthContext = createContext(null);
@@ -17,11 +18,18 @@ const AuthProvider = ({ children }) => {
     const [category, setCategory] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
+    const [notificationCount, setNotificationCount] = useState(0);
 
     const createANewUser = (email, password) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password)
     }
+
+
+    // Function to increment the notification count
+    const incrementNotification = () => {
+        setNotificationCount((prevCount) => prevCount + 1);
+    };
 
 
     const googleLogIn = () => {
@@ -55,22 +63,22 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             console.log("Current User", currentUser?.email);
-            // if (currentUser?.email) {
-            //     const user = { email: currentUser.email }
+            if (currentUser?.email) {
+                const user = { email: currentUser.email }
 
-            //     axios.post('https://food-sharing-server-phi.vercel.app/jwt', user, { withCredentials: true, })
-            //         .then(res => {
-            //             console.log("login", res.data)
-            //             setLoading(false);
-            //         })
-            // }
-            // else {
-            //     axios.post('https://food-sharing-server-phi.vercel.app/logout', {}, { withCredentials: true, })
-            //         .then(res => {
-            //             console.log("logout", res.data);
-            //             setLoading(false);
-            //         })
-            // }
+                axios.post('https://hostel-management-server-orcin.vercel.app/jwt', user, { withCredentials: true, })
+                    .then(res => {
+                        console.log("login", res.data)
+                        setLoading(false);
+                    })
+            }
+            else {
+                axios.post('https://hostel-management-server-orcin.vercel.app/logout', {}, { withCredentials: true, })
+                    .then(res => {
+                        console.log("logout", res.data);
+                        setLoading(false);
+                    })
+            }
             setLoading(false);
         });
         return () => {
@@ -79,11 +87,12 @@ const AuthProvider = ({ children }) => {
     }, []);
 
 
-
     const authInfo = {
         user,
         setUser,
         loading,
+        notificationCount,
+        setNotificationCount,
         createANewUser,
         logInAUser,
         logOut,

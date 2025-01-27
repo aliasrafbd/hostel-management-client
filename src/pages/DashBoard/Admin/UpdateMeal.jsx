@@ -1,19 +1,47 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import SectionHeading from '../../../components/SectionHeading';
 import { useForm } from 'react-hook-form';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../../providers/AuthProvider';
+import useMeal from '../../../hooks/useMeal';
+import Loading from '../../../components/Loading';
+import { useNavigate, useParams } from 'react-router-dom';
 import { imageUpload } from '../../../api/utils';
+import axios from 'axios';
 
-const AddMeal = () => {
+const UpdateMeal = () => {
 
-    const { user, notificationCount, setNotificationCount } = useContext(AuthContext);
-    const [buttonText, setButtonText] = useState('Add'); // State for button text
-
-    // const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
+    const { id } = useParams();
+    const { user } = useContext(AuthContext);
 
+    const { data:meal, isLoading, error, refetch } = useMeal(id)
+
+
+    const navigate = useNavigate();
+
+    if (isLoading) {
+        return <Loading></Loading>;
+    }
+    if (!meal) {
+        return <div>No meal found</div>; // Handle case where meal is not found
+    }
+    
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            title: meal.title,
+            description: meal.description,
+            ingredients: meal.ingredients,
+            price: meal.price,
+            category: meal.category,
+            image: meal.image,
+            distributorName: meal.distributorName,
+            distributorEmail: meal.distributorEmail,
+            postTime: meal.postTime,
+        },
+    });
+    
     const getBDTTime = () => {
         const now = new Date();
         const utcOffset = now.getTimezoneOffset() * 60000; // Local offset in milliseconds
@@ -31,83 +59,54 @@ const AddMeal = () => {
     };
 
 
-
-    // Function to increment the notification count
-    const incrementNotification = () => {
-        console.log("Clicked for noti");
-        setNotificationCount((prevCount) => prevCount + 1);
-    };
-
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
-
+    const {_id, title, category, ingredients, description, price, image, postTime, distributorName, distributorEmail } = meal;
+    
+    // const formattedPostTime = data.postTime.replace("T", " "); // Replace "T" with a space
 
     const onSubmit = async (data) => {
 
-        setButtonText('Adding');
-        
-        const formattedPostTime = data.postTime.replace("T", " "); // Replace "T" with a space
+        const imageFile = data.image[0]; // Ensure this is a valid File object
 
-            const imageFile = data.image[0]; // Ensure this is a valid File object
+        const imageURL = await imageUpload(imageFile);
+        console.log('Uploaded Image URL:', imageURL);
 
-            const imageURL = await imageUpload(imageFile);
-            console.log('Uploaded Image URL:', imageURL);
+        const {image, price, ...mealData} = data;
 
-        console.log(data);
-
-        const { price, image, ...newData } = data;
-        console.log(newData);
-
-        const reaction = {
-            count: 0,
-            userEmails: []
-        }
-
-        const reviews = {
-            review_count: 0,
-            reviews: [],
-        }
-
-        // now send the the add meal data with the image url 
-        const mealData = {
-            ...newData,
+         const UpdatedNewMealData = {
+            ...mealData,
             price: parseInt(price),
             image: imageURL,
-            reaction: reaction,
-            reviews: reviews,
-            rating: 0,
-        }
-        console.log(mealData);
-
-        const mealRes = await axiosSecure.post('/meals', mealData, {withCredentials:true})
-        // show success message 
-        if (mealRes.data.insertedId) {
-            Swal.fire({
-                position: "top",
-                icon: "success",
-                title: `Add a meal successfully`,
-                showConfirmButton: false,
-                timer: 1500
-            })
-            incrementNotification();
-            setButtonText('Added');
         }
 
+        console.log(UpdatedNewMealData);
+
+        try {
+            const response = await axios.put(`https://hostel-management-server-orcin.vercel.app/meals/${_id}`, UpdatedNewMealData);
+            if (response.data.modifiedCount > 0) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "This meal Updated Successfully",
+                    icon: "success",
+                    confirmButtonText: "Close",
+                });
+                navigate("/dashboard");
+            }
+        } catch (error) {
+            console.error("Error updating meal:", error);
+        }
     };
+
 
     return (
         <div className='w-[90%] mx-auto my-6'>
-            <SectionHeading title="Add a Meal"></SectionHeading>
+            <SectionHeading title="Update Meal"></SectionHeading>
             <form onSubmit={handleSubmit(onSubmit)} className="gap-2 grid grid-cols-2">
-            
+
                 {/* Title */}
                 <div>
                     <label className="block mb-2 text-sm font-medium text-gray-700">Title</label>
                     <input
+                        defaultValue={title}
                         type="text"
                         {...register("title", { required: "Title is required" })}
                         className="input input-bordered w-full"
@@ -215,14 +214,12 @@ const AddMeal = () => {
                     {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image.message}</p>}
                 </div>
 
-                <div className='col-span-2 mx-auto'>
-                    <button type="submit" className="btn btn-primary w-xsm" disabled={buttonText === 'Adding'}>
-                        {buttonText} {/* Display button text */}
-                    </button>
+                <div className='col-span-2'>
+                    <button type="submit" className="btn btn-primary w-full">Submit</button>
                 </div>
             </form>
         </div>
     );
 };
 
-export default AddMeal;
+export default UpdateMeal;

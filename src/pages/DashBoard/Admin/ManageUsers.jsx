@@ -1,43 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import { FaUsers } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Swal from 'sweetalert2';
-
-
+import Loading from '../../../components/Loading';
 
 const ManageUsers = () => {
-
     const axiosSecure = useAxiosSecure();
+    const [searchName, setSearchName] = useState('');
+    const [searchEmail, setSearchEmail] = useState('');
 
     const { data: users = [], isLoading, error, refetch } = useQuery({
-        queryKey: ['users'], // Unique key for caching
+        queryKey: ['users', searchName, searchEmail], // Include search params in the query key
         queryFn: async () => {
-            const res = await axiosSecure.get('/users');
+            const params = {};
+            if (searchName) params.name = searchName;
+            if (searchEmail) params.email = searchEmail;
+
+            const res = await axiosSecure.get('/users', { params, withCredentials: true});
             return res.data;
-        }
+        },
     });
 
     const handleMakeAdmin = (user) => {
         axiosSecure.patch(`/users/admin/${user._id}`)
             .then(res => {
-                console.log(res.data);
                 if (res.data.modifiedCount > 0) {
                     refetch();
                     Swal.fire({
-                        title: "Sucess!",
-                        text: `${user?.name} is an Admin`,
+                        title: "Success!",
+                        text: `${user?.name} is now an Admin.`,
                         icon: "success"
                     });
                 }
-            })
-    }
+            });
+    };
 
     const handleUserDelete = (user) => {
-
-        console.log("Delete a food");
-
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -50,66 +50,98 @@ const ManageUsers = () => {
             if (result.isConfirmed) {
                 axiosSecure.delete(`/users/${user._id}`)
                     .then(res => {
-                        console.log(res.data)
                         if (res.data.deletedCount > 0) {
                             refetch();
                             Swal.fire({
                                 title: "Deleted!",
-                                text: "A user is deleted.",
+                                text: "The user has been deleted.",
                                 icon: "success"
                             });
                         }
-                    })
+                    });
             }
         });
-    }
-
+    };
 
     return (
-        <>
-            <h2 className='text-xl font-extrabold'>Total Users: {users?.length}</h2>
-            <div>
-                Manage Users
+        <div className="manage-users">
+            <h2 className="text-xl font-bold mb-4">Manage Users</h2>
+            
+            <div className="flex gap-4 mb-4">
+                <input
+                    type="text"
+                    placeholder="Search by Name"
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                    className="input input-bordered"
+                />
+                <input
+                    type="text"
+                    placeholder="Search by Email"
+                    value={searchEmail}
+                    onChange={(e) => setSearchEmail(e.target.value)}
+                    className="input input-bordered"
+                />
+                <button
+                    onClick={refetch}
+                    className="btn btn-primary"
+                >
+                    Search
+                </button>
             </div>
+
             <div className="overflow-x-auto">
-                <table className="table table-zebra">
-                    {/* head */}
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            users?.map((user, index) => <tr key={user._id}>
-                                <th>{index + 1}</th>
-                                <td>{user?.name}</td>
-                                <td>{user?.email}</td>
-                                <td>
-                                    {
-                                        user?.role == "admin" ?
+                {isLoading ? (
+                    <Loading></Loading>
+                ) : error ? (
+                    <p className="text-red-500">{error.message}</p>
+                ) : (users?.length==0) ? <p className='my-28 text-red-900 font-extrabold text-3xl'>No data</p>
+                : (
+                    <table className="table table-zebra">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                                <th>Badge</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.map((user, index) => (
+                                <tr key={user._id}>
+                                    <td>{index + 1}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>
+                                        {user.role === "admin" ? (
                                             "Admin"
-                                            :
-                                            <button className='btn btn-error'
+                                        ) : (
+                                            <button
+                                                className="btn btn-error"
                                                 onClick={() => handleMakeAdmin(user)}
-                                            ><FaUsers className='text-xl'></FaUsers></button>
-
-                                    }
-                                </td>
-                                <td><button onClick={() => handleUserDelete(user)} className=''><MdDelete className='text-red-700 text-xl'></MdDelete></button></td>
-                                <td>Not Premium</td>
-                            </tr>)
-                        }
-
-                    </tbody>
-                </table>
+                                            >
+                                                <FaUsers />
+                                            </button>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleUserDelete(user)}
+                                            className="btn btn-danger"
+                                        >
+                                            <MdDelete />
+                                        </button>
+                                    </td>
+                                    <td>{user.badge || 'N/A'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
-        </>
+        </div>
     );
 };
 

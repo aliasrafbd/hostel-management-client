@@ -88,4 +88,17 @@
   0% { transform: rotate(0deg) }
   100% { transform: rotate(360deg) }
 }
+
+.pagination {
+  margin-top: 10px;
+}
+
+.pagination > div > button {
+  padding: 1px 8px;
+  background-color: rgb(201, 191, 191);
+}
  
+.pagination .selected {
+  background-color: rgb(135, 203, 32);
+  padding: 1px 8px;
+}

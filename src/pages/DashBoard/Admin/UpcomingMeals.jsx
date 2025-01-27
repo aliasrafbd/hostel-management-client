@@ -1,31 +1,85 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import AddMealWithModal from '../../../components/AddMealWithModal';
-import { useUpcomingMeals } from '../../../hooks/useUpcomingMeals';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import MealCard from '../../../components/MealCard';
+import AddMealWithModal from '../../../components/AddMealWithModal';
+import LikeButtonUpcomingMeal from '../../../components/LikeButtonUpcomingMeal';
+import SectionHeading from '../../../components/SectionHeading';
+import ReactStars from 'react-rating-stars-component';
+import { FcLike } from "react-icons/fc";
+import { AuthContext } from '../../../providers/AuthProvider';
+import usePremiumMember from '../../../hooks/usePremiumMember';
+import { BiSolidLike } from "react-icons/bi";
 
 const UpcomingMeals = () => {
     const { pathname } = useLocation();
     const axiosSecure = useAxiosSecure();
-
-    const { data: upcomingMeals, isLoading, error, refetch } = useUpcomingMeals();
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleAddMealClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
     const queryClient = useQueryClient();
+    const [upcomingMealsCount, setUpcomingMealsCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const {PremiumMember} = usePremiumMember();
+    const {notificationCount, setNotificationCount} = useContext(AuthContext);
 
-    // Mutation to publish a meal
+
+    const closeModal = () => setIsModalOpen(false);
+
+    console.log("He is a premium Member", PremiumMember);
+
+    // Fetch total count for pagination
+    useEffect(() => {
+        const fetchCount = async () => {
+            const response = await axiosSecure.get('/upcomingmealscount');
+            setUpcomingMealsCount(response.data.count);
+        };
+        fetchCount();
+    }, [axiosSecure]);
+
+    const numberOfPages = Math.ceil(upcomingMealsCount / itemsPerPage);
+    const pages = [...Array(numberOfPages).keys()];
+
+    // Fetch meals
+    const { data: upcomingMeals = [], isLoading, refetch } = useQuery({
+        queryKey: ['upcomingmeals', { currentPage, itemsPerPage }],
+        queryFn: async ({ queryKey }) => {
+            const [, { currentPage, itemsPerPage }] = queryKey;
+            const response = await axiosSecure.get(
+                `/upcomingmeals?page=${currentPage - 1}&size=${itemsPerPage}`
+            );
+            return response.data;
+        },
+        // staleTime: 10000,
+        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+    });
+
+
+    // Fetch all upcoming meals (no pagination)
+    const { data: upcomingMealsAll = [], isLoading: isLoadingAllUpcoming, refetch: refetchAllUpcoming } = useQuery({
+        queryKey: ['upcomingmealsall'], // Removed pagination parameters from queryKey
+        queryFn: async () => {
+            const response = await axiosSecure.get(`/upcomingmealsall`); // Endpoint without pagination parameters
+            return response.data;
+        },
+        // staleTime: 10000,
+        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+    });
+
+
+    // if (isLoading) return <div>Loading...</div>;
+
+    
+    // Function to increment the notification count
+    const incrementNotification = () => {
+        console.log("Clicked for noti");
+        setNotificationCount((prevCount) => prevCount + 1);
+    };
+
+    console.log("total Notifications", notificationCount);
+
+
+    // Publish meal mutation
     const publishMeal = useMutation({
         mutationFn: async (id) => {
             const response = await axiosSecure.post(`/publish-meal/${id}`);
@@ -37,36 +91,44 @@ const UpcomingMeals = () => {
                 title: 'Meal Published!',
                 text: 'The meal has been successfully published.',
             });
-            queryClient.invalidateQueries(['upcomingMeals']);
+            incrementNotification();
+            queryClient.invalidateQueries(['upcomingmeals']);
+            refetch(); // Refetch meals after publishing
         },
     });
 
-    const handlePublishClick = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Do you want to publish this meal?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, publish it!',
-            cancelButtonText: 'No, cancel!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                publishMeal.mutate(id);
-            }
-        });
+    const handleReactionUpdate = (meal, newReactionCount) => {
+        if (newReactionCount === 1) {
+            publishMeal.mutate(meal._id);
+        }
     };
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    const handleItemsPerPage = (e) => {
+        setItemsPerPage(parseInt(e.target.value, 10));
+        setCurrentPage(1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < numberOfPages) setCurrentPage(currentPage + 1);
+    };
+
 
     return (
-        <>
-            {pathname === "/dashboard/upcomingmeals" ?
-                (
-                    <div>
-                        <h1 className="text-2xl font-bold">Upcoming Meals</h1>
+        <div className="max-w-7xl mx-auto">
+            <SectionHeading title="Upcoming Meals"></SectionHeading>
+            {isModalOpen && <AddMealWithModal closeModal={closeModal} refetch={refetch} />}
 
-                        <div className="overflow-x-auto">
+            {/* Table or Card Layout */}
+            {pathname === '/dashboard/upcomingmeals' ? (
+                <>
+
+                    <div className="flex flex-col h-full">
+                        {/* Table Container */}
+                        <div className="h-[500px] overflow-x-auto">
                             <table className="table w-full">
                                 <thead>
                                     <tr>
@@ -74,58 +136,121 @@ const UpcomingMeals = () => {
                                         <th>Title</th>
                                         <th>Category</th>
                                         <th>Reaction Count</th>
-                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {upcomingMeals
-                                        .sort((a, b) => b.reaction - a.reaction) // Sort by reaction count
-                                        .map((meal, index) => (
-                                            <tr key={meal._id}>
-                                                <td>{index + 1}</td>
-                                                <td>{meal.title}</td>
-                                                <td>{meal.category}</td>
-                                                <td>{meal.reaction}</td>
-                                                <td>
-                                                    <button
-                                                        className="btn btn-primary"
-                                                        onClick={() => handlePublishClick(meal._id)}
-                                                        disabled={publishMeal.isLoading}
-                                                    >
-                                                        Publish
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                    {upcomingMeals.map((meal, index) => (
+                                        <tr key={meal._id}>
+                                            <td>{index + 1}</td>
+                                            <td>{meal.title}</td>
+                                            <td>{meal.category}</td>
+                                            <td>{meal.reaction?.count}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-success"
+                                                    onClick={() => publishMeal.mutate(meal._id)}
+                                                >
+                                                    Publish
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
 
-                        <button
-                            className="btn btn-primary mt-4"
-                            onClick={handleAddMealClick}
-                        >
-                            Add Meal
-                        </button>
+                        {/* Add Meal Button */}
+                        <div className="mt-4">
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                Add Meal
+                            </button>
+                        </div>
 
-                        {/* Conditionally render the AddMealWithModal */}
-                        {isModalOpen && (
-                            <AddMealWithModal
-                                closeModal={closeModal}
-                                refetch={refetch}
-                            />
-                        )}
-                    </div>
-                ) : (
-                    <div className='max-w-7xl mx-auto my-4'>
-                        <div className='grid grid-cols-3 gap-6'>
-                            {
-                                upcomingMeals.map(meal => <MealCard key={meal._id} meal={meal}></MealCard>)
-                            }
+                        {/* Fixed Pagination */}
+                        <div className="sticky bottom-0 bg-white border-t mt-4 flex justify-center gap-2 py-2">
+                            <button
+                                className="btn btn-secondary"
+                                disabled={currentPage === 1}
+                                onClick={handlePrevPage}
+                            >
+                                Previous
+                            </button>
+                            {pages.map((page) => (
+                                <button
+                                    key={page}
+                                    className={`btn ${currentPage === page + 1 ? "btn-active" : "btn-outline"
+                                        }`}
+                                    onClick={() => setCurrentPage(page + 1)}
+                                >
+                                    {page + 1}
+                                </button>
+                            ))}
+                            <button
+                                className="btn btn-secondary"
+                                disabled={currentPage === numberOfPages}
+                                onClick={handleNextPage}
+                            >
+                                Next
+                            </button>
                         </div>
                     </div>
-                )}
-        </>
+
+                </>
+            ) : (
+                <div className="grid grid-cols-3 gap-6 my-6">
+                    {upcomingMealsAll.map((meal) => (
+                        <>
+                            <div className="card">
+                                <figure className="relative">
+                                    <img
+                                        className="h-80 w-full transition-transform duration-300 group-hover:scale-110" // Scale on hover
+                                        src={meal?.image}
+                                        alt="Meal"
+                                    />
+                                </figure>
+                                <div className='flex justify-between'>
+                                    <div className="flex gap-1 items-center justify-center">
+                                        {
+                                            PremiumMember ? (<div className="">
+                                                <LikeButtonUpcomingMeal
+                                                    meal={meal}
+                                                    userEmails={meal.reaction?.userEmails || []}
+                                                    initialReaction={meal.reaction?.count || 0}
+                                                    refetchAllUpcoming={refetchAllUpcoming}
+                                                    onReactionUpdate={(newCount) =>
+                                                        handleReactionUpdate(meal, newCount)
+                                                    }
+                                                />
+                                            </div>) : (<BiSolidLike className='text-gray-200'></BiSolidLike>)
+                                        }
+                                        <p>{meal?.reaction?.count}</p>
+                                    </div>
+                                    <div className="flex justify-end gap-2 items-center">
+                                        <p>{meal?.rating?.toFixed(1)}</p>
+                                        <div>
+                                            <ReactStars
+                                                key={meal?.rating}
+                                                count={5}
+                                                value={meal?.rating}
+                                                size={20}
+                                                edit={false}
+                                                activeColor="#ddd700"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h2 className="text-center text-md font-extrabold">{meal?.title}</h2>
+
+                            </div>
+
+                        </>
+                    ))}
+                </div>
+            )}
+        </div>
     );
 };
 

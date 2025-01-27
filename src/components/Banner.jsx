@@ -1,12 +1,22 @@
 import React from "react";
+import usePremiumMember from "../hooks/usePremiumMember";
+import Loading from "./Loading";
 
-const Banner = () => {
+const Banner = ({search, setSearch}) => {
+
+    const {data:isPremiumMember, isLoading} = usePremiumMember();
+    
+    if(isLoading){
+        return <Loading></Loading>
+    }
+
+    console.log(isPremiumMember);
 
     return (
         <>
 
             <div
-                className="relative bg-cover bg-fixed bg-center h-[150px] md:h-[600px]"
+                className="relative bg-cover w-full bg-fixed bg-center h-[150px] md:h-[600px]"
                 style={{ backgroundImage: "url('../src/assets/slider-01.jpg')" }} // Add your image path
             >
                 {/* Gradient Overlay */}
@@ -14,21 +24,25 @@ const Banner = () => {
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
-                    <h1 className="text-4xl font-bold mb-4">Effortless Hostel Management Starts Here</h1>
+                    <h1 className="text-5xl text-white font-extrabold mb-4">PoroshMoni Hostel, Chattogram</h1>
                     <p className="text-lg mb-6">
-                        Simplify hostel operations, track residents, and manage payments—all in one place.
+                        Simplify hostel operations, track residents, and manage payments— all in one place.
                     </p>
-                    <div className="flex w-full max-w-md">
+                    <div className="flex w-full max-w-md join">
                         {/* Input Field */}
                         <input
                             type="text"
-                            placeholder="Search for a hostel or resident ID..."
-                            className="flex-grow h-12 p-3 rounded-l-lg border-none outline-none text-gray-700"
+                            placeholder="Search meals..."
+                            className="input input-bordered text-black w-full max-w-2xl mb-2 join-item rounded-r-full"
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value); // Update the search input
+                            }}
                         />
 
                         {/* Gradient Button */}
                         <button
-                            className="h-12 px-6 text-white font-medium rounded-r-lg bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
+                            className="h-12 px-12 text-sm text-white font-medium bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 btn join-item rounded-r-full"
                         >
                             Find Now
                         </button>

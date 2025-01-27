@@ -4,27 +4,34 @@ import { AuthContext } from '../providers/AuthProvider';
 import { easeOut, motion } from "framer-motion";
 import logo from "../../src/assets/poroshmoni-logo.png"
 import { FaUser } from "react-icons/fa";
+import { IoIosNotificationsOutline } from "react-icons/io";
+
 
 const Navbar = () => {
 
-    const { user, logOut } = useContext(AuthContext);
-
+    const { user, logOut, notificationCount, setNotificationCount } = useContext(AuthContext);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
-  const closeDropdown = () => setIsDropdownOpen(false);
+
+    const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
+    const closeDropdown = () => setIsDropdownOpen(false);
 
     // const { pathname } = useLocation();
 
     // console.log(user);
+
+    // Function to increment the notification count
+    const incrementNotification = () => {
+
+        setNotificationCount((prevCount) => prevCount + 1);
+    };
 
     const Links = (<>
 
         <NavLink to="/"><button><li className='py-1 px-3 font-semibold'>Home</li></button></NavLink>
         <NavLink to="/meals"><button><li className='py-1 px-3 font-semibold'>Meals</li></button></NavLink>
         <NavLink to="/upcomingmeals"><button><li className='py-1 px-3 font-semibold'>Upcoming Meals</li></button></NavLink>
-        <NavLink to="/notifications"><button><li className='py-1 px-3 font-semibold'>Notification</li></button></NavLink>
 
         {
             !user && (<NavLink to="/register"><button><li className='py-1 px-3 font-semibold'>Join Us</li></button></NavLink>)
@@ -32,11 +39,14 @@ const Navbar = () => {
 
     </>)
 
+    console.log("notification count from nav", notificationCount);
+
     return (
         <div className="bg-black text-white">
             <div className="navbar mx-auto max-w-9xl lg:max-w-7xl px-4 lg:px-8 md:px-12">
                 {/* Navbar Start */}
                 <div className="navbar-start">
+
                     <div className="dropdown mr-6 md:mr-12 lg:mr-0">
                         <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
                             <svg
@@ -70,9 +80,22 @@ const Navbar = () => {
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">{Links}</ul>
                 </div>
+                <div className='relative text-xl'>
+                    <button
+                        className='relative focus:outline-none'
+                    ><IoIosNotificationsOutline />
+                    </button>
+                    {/* Badge */}
+                    {notificationCount > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1 py-[2px] rounded-full">
+                            {notificationCount}
+                        </span>
+                    )}
+                </div>
 
                 {/* Navbar End */}
                 <div className="navbar-end">
+
                     <div className="flex gap-4 justify-center items-center">
                         {/* Profile Picture and Dropdown */}
                         {user ? (

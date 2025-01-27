@@ -11,7 +11,7 @@ const RequestButton = ({ meal }) => {
     
     const { user } = useContext(AuthContext);
 
-    const [isPremiumMember, isMemberLoading] = usePremiumMember(true);
+    // const [isPremiumMember, isMemberLoading] = usePremiumMember(true);
 
     // if (isMemberLoading) {
     //     return <Loading></Loading>
@@ -72,7 +72,7 @@ const RequestButton = ({ meal }) => {
                     disabled={isRequested}
                     className={`btn my-2 ${isRequested ? 'btn-disabled' : 'btn-primary'}`}
                 >
-                    {isRequested ? 'Requested' : `Request this ${meal.title}`}
+                    {isRequested ? 'Requested' : `Request ${meal.title}`}
                 </button>
                 
         </div >

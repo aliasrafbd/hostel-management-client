@@ -20,12 +20,12 @@ const LikeButton = ({ mealId, userEmails, initialReaction }) => {
 
         try {
             const response = await axios.put(
-                `http://localhost:5000/meals/${mealId}/like`,
+                `https://hostel-management-server-orcin.vercel.app/meals/${mealId}/like`,
                 { userEmail }
             );
 
             // Update reaction count and set hasLiked
-            setReactionCount(response.data.reaction.count);
+            setReactionCount(response.data?.reaction?.count);
             setHasLiked(true);
         } catch (error) {
             Swal.fire({
@@ -39,18 +39,16 @@ const LikeButton = ({ mealId, userEmails, initialReaction }) => {
 
     return (
         <>
-            <div className='flex items-center gap-1'>
-                <AiFillLike className='' />
-                <p>{reactionCount}</p>
+            <div className='flex gap-1'>
+                <button
+                    onClick={handleLike}
+                    disabled={hasLiked}
+                    className=""
+                >
+                    <AiFillLike className='' />
+                </button>
+                    <p>{reactionCount}</p>
             </div>
-            <button
-                onClick={handleLike}
-                disabled={hasLiked}
-                className={`px-4 py-2 text-white font-semibold rounded ${hasLiked ? 'bg-gray-700' : 'bg-blue-500 hover:bg-blue-600'
-                    }`}
-            >
-                Like
-            </button>
         </>
     );
 };

@@ -7,15 +7,14 @@ const usePremiumMember = () => {
     const {user} = useContext(AuthContext);
     const axiosPublic = useAxiosPublic();
 
-    const {data: isPremiumMember, isPending: isMemberLoading } = useQuery({
+    const {data:PremiumMember=[], isLoading} = useQuery({
         queryKey: [user?.email, "isPremiumMember"],
         queryFn: async() => {
             const res = await axiosPublic.get(`users/premium/${user.email}`)
-            console.log(res.data);
-            return res?.data?.premiumMember;
+            return res?.data;
         }
     })
-    return [isPremiumMember, isMemberLoading];
+    return {PremiumMember, isLoading};
 };
 
 export default usePremiumMember;

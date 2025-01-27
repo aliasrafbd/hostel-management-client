@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import AuthContext from '../context/AuthContext/AuthContext';
+import { AuthContext } from '../providers/AuthProvider';
 import Loading from '../components/Loading';
 
 const PrivateRoute = ({ children }) => {

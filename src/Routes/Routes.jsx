@@ -21,6 +21,8 @@ import UpcomingMeals from "../pages/DashBoard/Admin/UpcomingMeals";
 import MyProfile from "../pages/DashBoard/User/MyProfile";
 import AdminRoute from "./AdminRoute";
 import Checkout from "../components/Checkout";
+import PrivateRoute from "./PrivateRoute";
+import UpdateMeal from "../pages/DashBoard/Admin/UpdateMeal";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +48,7 @@ export const router = createBrowserRouter([
       {
         path: '/meal/:id',
         element: <MealDetails></MealDetails>,
-        loader: ({ params }) => fetch(`http://localhost:5000/meals`)
+        loader: ({ params }) => fetch(`https://hostel-management-server-orcin.vercel.app/meals`)
       },
       {
         path: '/upcomingmeals',
@@ -54,7 +56,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/checkout/:packageName',
-        element: <Checkout></Checkout>,
+        element: <PrivateRoute><Checkout></Checkout></PrivateRoute>,
       },
     ]
   },
@@ -66,53 +68,64 @@ export const router = createBrowserRouter([
       // user Routes 
       {
         path: "/dashboard",
-        element: <AdminRoute><AllReviews></AllReviews></AdminRoute>
+        element: <div className="text-center text-green-500 text-5xl my-32">Welcome to the Dashboard</div>
       },
       {
         path: "myprofile",
-        element: <AdminRoute><MyProfile></MyProfile></AdminRoute>,
+        element: <PrivateRoute><MyProfile></MyProfile></PrivateRoute>,
       },
-      // {
-      //   path: "requestedmeals",
-      //   element: <RequestedMeals></RequestedMeals>,
-      // },
+      
       {
         path: "paymenthistory",
-        element: <PaymentHistory></PaymentHistory>,
+        element: <PrivateRoute><PaymentHistory></PaymentHistory></PrivateRoute>,
+      },
+      {
+        path: "requestedmeals",
+        element: <PrivateRoute><RequestedMeals></RequestedMeals></PrivateRoute>
       },
       {
         path: "myreviews",
-        element: <MyReviews></MyReviews>,
+        element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>,
       },
 
       // Admin Routes 
       {
         path: "addmeal",
-        element: <AddMeal></AddMeal>,
+        element: <AdminRoute><AddMeal></AddMeal></AdminRoute>,
       },
       {
         path: "adminprofile",
-        element: <AdminProfile></AdminProfile>,
+        element: <AdminRoute><AdminProfile></AdminProfile></AdminRoute>,
       },
       {
         path: "allmeals",
-        element: <AllMeals></AllMeals>,
+        element: <AdminRoute><AllMeals></AllMeals></AdminRoute>,
+        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/mealscount'),
+      },
+      {
+        path: "/dashboard/meals/:id",
+        element: <AdminRoute><UpdateMeal></UpdateMeal></AdminRoute>,
+        loader: ({ params }) => fetch(`https://hostel-management-server-orcin.vercel.app/meals`)
+        
       },
       {
         path: "allreviews",
-        element: <AllReviews></AllReviews>,
+        element: <AdminRoute><AllReviews></AllReviews></AdminRoute>,
+        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/mealscount'),
       },
       {
         path: "manageusers",
-        element: <ManageUsers></ManageUsers>,
+        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>,
       },
       {
         path: "servemeals",
-        element: <ServeMeals></ServeMeals>,
+        element: <AdminRoute><ServeMeals></ServeMeals></AdminRoute>,
+        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/servemealscount'),
       },
       {
         path: "upcomingmeals",
-        element: <UpcomingMeals></UpcomingMeals>,
+        element: <AdminRoute><UpcomingMeals></UpcomingMeals></AdminRoute>,
+        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/upcomingmealscount'),
       },
 
     ]

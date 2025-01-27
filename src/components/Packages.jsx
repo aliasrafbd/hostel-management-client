@@ -8,21 +8,21 @@ function Packages() {
     const packages = [
         {
             name: 'Silver',
-            price: 29.99,
+            price: 20,
             features: ['Basic Support', '10GB Storage', 'Monthly Reports'],
             bgColor: 'bg-gray-100',
             textColor: 'text-gray-700'
         },
         {
             name: 'Gold',
-            price: 59.99,
+            price: 30,
             features: ['Priority Support', '50GB Storage', 'Weekly Reports'],
             bgColor: 'bg-yellow-100',
             textColor: 'text-yellow-700'
         },
         {
             name: 'Platinum',
-            price: 99.99,
+            price: 40,
             features: ['24/7 Support', 'Unlimited Storage', 'Daily Reports'],
             bgColor: 'bg-blue-100',
             textColor: 'text-blue-700'
@@ -36,7 +36,7 @@ function Packages() {
 
     return (
         <div className="max-w-7xl mx-auto py-10 px-4">
-            <SectionHeading title="Be Premium Member"></SectionHeading>
+            <SectionHeading title="Be a Premium Member"></SectionHeading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {packages.map((pkg) => (
                     <div
