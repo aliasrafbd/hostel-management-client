@@ -126,7 +126,7 @@ const MealDetails = () => {
                         <p>Put Rating for <span className='font-bold text-orange-600'>{title}</span>:</p>
                         <ReactStars
                             count={5}
-                            value={rating} // User's initial input value
+                            value={rating} 
                             onChange={handleUpdateRating}
                             size={30}
                             activeColor="#ffd799"

@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const [search, setSearch] = useState(""); // State for search input
+    const [search, setSearch] = useState(""); 
     const [category, setCategory] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
@@ -26,7 +26,6 @@ const AuthProvider = ({ children }) => {
     }
 
 
-    // Function to increment the notification count
     const incrementNotification = () => {
         setNotificationCount((prevCount) => prevCount + 1);
     };
@@ -43,13 +42,6 @@ const AuthProvider = ({ children }) => {
     }
 
     const logOut = () => {
-        // Swal.fire({
-        //     title: 'Logged Out, Please Login',
-        //     icon: 'info',
-        //     timer: 1000,
-        //     showConfirmButton: false,
-        //     timerProgressBar: true,
-        // });
         setLoading(true)
         return signOut(auth)
     }
@@ -102,8 +94,6 @@ const AuthProvider = ({ children }) => {
         category, setCategory,
         minPrice, setMinPrice,
         maxPrice, setMaxPrice,
-
-
     }
 
 
