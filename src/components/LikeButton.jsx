@@ -16,7 +16,7 @@ const LikeButton = ({ mealId, userEmails, initialReaction }) => {
     );
 
     const handleLike = async () => {
-        if (hasLiked) return; // Prevent multiple likes from the same user
+        if (hasLiked) return; 
 
         try {
             const response = await axios.put(
@@ -24,7 +24,7 @@ const LikeButton = ({ mealId, userEmails, initialReaction }) => {
                 { userEmail }
             );
 
-            // Update reaction count and set hasLiked
+            
             setReactionCount(response.data?.reaction?.count);
             setHasLiked(true);
         } catch (error) {

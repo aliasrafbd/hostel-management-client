@@ -15,10 +15,7 @@ const LikeButtonUpcomingMeal = ({ meal, userEmails, initialReaction, onReactionU
 
     const { data: isPremiumMember } = usePremiumMember();
 
-    // if (isLoading) {
-    //     return <Loading></Loading>
-    // }
-
+     
     // Function to increment the notification count
     const incrementNotification = () => {
         setNotificationCount((prevCount) => prevCount + 1);
@@ -30,13 +27,11 @@ const LikeButtonUpcomingMeal = ({ meal, userEmails, initialReaction, onReactionU
     const handleLike = async () => {
         if (!userEmail || hasLiked) return;
 
-            // API call to update likes
             await axiosSecure.put(`/upcomingmeals/${meal._id}/like`, { userEmail });
             setReactionCount(reactionCount + 1);
             incrementNotification();
             setHasLiked(true);
 
-            // Notify parent about the new reaction count
             onReactionUpdate(reactionCount + 1);
             refetchAllUpcoming();
     };

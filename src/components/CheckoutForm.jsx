@@ -29,7 +29,6 @@ const CheckoutForm = ({ packageName, amount, clientSecret }) => {
         const cardElement = elements.getElement(CardElement);
 
         try {
-            // Confirm the payment using the client secret
             const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: cardElement,
@@ -61,24 +60,15 @@ const CheckoutForm = ({ packageName, amount, clientSecret }) => {
                     packageName: packageName,
                 }
 
-                // const {userEmail, packageName} = paymentData;
-
-                // TODO: save this payment data to packagepaymentdata collection,
-                // change user status: bronze to purchased package name
-
                 const paymentDataRes = await axiosSecure.post('/package-payment-data', paymentData)
-                // show success message 
                 if (paymentDataRes.data.insertedId) {
                     console.log("success");
                 }
 
                 const updatedBadgeRes = await axiosSecure.patch('/update-badge', paymentData)
-                // show success message 
                 if (updatedBadgeRes.data.modifiedCount>0) {
                     console.log("success");
                 }
-
-
 
 
             } else {

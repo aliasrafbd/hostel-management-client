@@ -4,7 +4,6 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
 
-// Replace with your Stripe public key
 const stripePromise = loadStripe('pk_test_51QjhL0FlTqzyqEh9x8FLYhq3XfaRSSaVjABkqfviZBYKGmdJ5XUq6gi0mvx7zrDLZjQC1fUiyKpZwzQUKwhyMEsS00NOFyuLzn');
 
 const Checkout = () => {
@@ -13,7 +12,7 @@ const Checkout = () => {
     const [paymentAmount, setPaymentAmount] = useState(0);
 
     useEffect(() => {
-        // Fetch the PaymentIntent client secret when the page loads
+        
         const fetchPaymentIntent = async () => {
             try {
                 let amount;
@@ -37,8 +36,8 @@ const Checkout = () => {
                 console.log('Payment Intent Data:', data);
     
                 if (data.success) {
-                    setClientSecret(data.clientSecret); // Save clientSecret to state
-                    setPaymentAmount(data.amount); // Save amount to state (if needed)
+                    setClientSecret(data.clientSecret); 
+                    setPaymentAmount(data.amount); 
                 } else {
                     console.error('Error in response:', data.error);
                 }
