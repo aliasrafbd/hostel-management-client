@@ -9,7 +9,6 @@ import LoginWithGoogle from '../../components/LoginWithGoogle';
 import { easeOut, motion } from "framer-motion";
 
 function Login() {
-    // Initialize useForm hook to manage form state
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const navigate = useNavigate();
@@ -17,7 +16,6 @@ function Login() {
     const { user, setUser, logInAUser, loading, googleLogIn } = useContext(AuthContext);
     const [error, setError] = useState("");
 
-    // Handle form submission
     const onSubmit = (loginData) => {
         console.log("Login Data:", loginData);
 

@@ -28,7 +28,6 @@ function Register() {
                 setUser(result?.user)
                 updateUserProfile({ displayName: registerData.displayName, photoURL: registerData.photoURL })
                     .then(() => {
-                        // create user entry in the database
                         const userInfo = {
                             name: registerData.displayName,
                             email: registerData.email,
@@ -53,8 +52,6 @@ function Register() {
                     })
                     .catch((error) => {
                     })
-                // logOut();
-                // navigate("/login");
 
             })
             .catch((error) => {
@@ -98,10 +95,6 @@ function Register() {
                                     placeholder="Enter your photo URL"
                                     {...register('photoURL', {
                                         required: "Photo URL is required",
-                                        // pattern: {
-                                        //     value: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif))$/i,
-                                        //     message: "Invalid URL format"
-                                        // }
                                     })}
                                     className='rounded-md'
                                     style={{ width: '100%', padding: '8px', fontSize: '14px' }}

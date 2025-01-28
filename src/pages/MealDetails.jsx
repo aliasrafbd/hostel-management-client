@@ -33,18 +33,15 @@ const MealDetails = () => {
     const { _id, price, rating, title, description, ingredients, reviews, reaction: { count, userEmails } } = data;
 
     const handleUpdateRating = async (newUserRating) => {
-        // Calculate the new average rating
 
         refetch();
         const response = await axios.patch(`http://localhost:5000/meals/${_id}/rating`, { newUserRating });
         
     };
 
-    // Handle review submission
     const handleReviewSubmit = async () => {
         if (review.trim()) {
             try {
-                // Send PUT request to update reviews for the loaded meal using axios
                 const response = await axiosSecure.put(`/api/update-review/${data._id}`, {
                     review: review,
                     userEmail: user?.email,
@@ -92,11 +89,11 @@ const MealDetails = () => {
                             </p>
                             <ReactStars
 
-                                key={rating} // Use the updated rating state as the key
+                                key={rating} 
                                 count={5}
-                                value={rating} // Use the updated rating state
+                                value={rating} 
                                 size={20}
-                                edit={false} // Make it read-only
+                                edit={false} 
                                 activeColor="#ddd700"
                             />
                         </div>

@@ -5,14 +5,14 @@ import useMeals from '../../hooks/useMeals';
 import PopularMeals from '../../components/PopularMeals';
 import Packages from '../../components/Packages';
 import { useQuery } from '@tanstack/react-query';
-import debounce from "lodash.debounce"; // Install lodash.debounce for debouncing
+import debounce from "lodash.debounce"; 
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 
 const Home = () => {
 
-    const [search, setSearch] = useState(""); // State for search input
-    const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced search state
+    const [search, setSearch] = useState(""); 
+    const [debouncedSearch, setDebouncedSearch] = useState(""); 
     const [category, setCategory] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
@@ -37,28 +37,17 @@ const Home = () => {
     const { data: meals = [], isLoading, error } = useQuery({
         queryKey: ["meals", debouncedSearch],
         queryFn: async () => {
-            console.log("API hit with search:", debouncedSearch); // Debugging the value
+            console.log("API hit with search:", debouncedSearch); 
             const response = await axiosSecure.get(`/meals/hostel`, {
                 params: {
-                    search: debouncedSearch, // Pass search as a query parameter
+                    search: debouncedSearch, 
                 },
             });
             return response.data;
         },
-        enabled: !!debouncedSearch || search === "", // Run query when there's a search term or it's cleared
+        enabled: !!debouncedSearch || search === "", 
     });
 
-
-
-    // console.log(data?.data);
-
-    // if (isLoading) {
-    //     return <span class="loader"></span>
-    // }
-
-    // const breakfast = data?.data?.filter((meal) => meal.category === "Breakfast");
-    // const lunch = data?.data?.filter((meal) => meal.category === "Lunch");
-    // const dinner = data?.data?.filter((meal) => meal.category === "Dinner");
 
     return (
         <div className=''>

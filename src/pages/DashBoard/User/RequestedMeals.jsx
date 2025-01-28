@@ -18,7 +18,6 @@ const RequestedMeals = () => {
     
     const userEmail = user?.email;
 
-    // Destructuring useQuery response
     const { data: meals = [], isLoading, error, refetch } = useQuery({
         queryKey: ['requestedMeals', userEmail],
         queryFn: () => fetchRequestedMeals(userEmail),
@@ -26,10 +25,8 @@ const RequestedMeals = () => {
     });
 
 
-    // Cancel handler
     const handleCancel = (mealId) => {
         console.log(`Cancel meal with ID: ${mealId}`);
-        // Add cancellation logic here, e.g., axios.delete(...)
     };
 
     if (isLoading) {

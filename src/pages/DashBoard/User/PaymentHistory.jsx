@@ -3,21 +3,19 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../providers/AuthProvider';
 
-// Fetch payments by email
 const fetchPaymentsByEmail = async (email) => {
   const response = await axios.get(`http://localhost:5000/payments/${email}`, {withCredentials: true});
-  return response.data.data; // Access the "data" key in the response
+  return response.data.data; 
 };
 
 const PaymentHistory = () => {
   const { user } = useContext(AuthContext);
   const userEmail = user?.email;
 
-  // Fetch payments using useQuery
   const { data: payments, isLoading, error } = useQuery({
     queryKey: ['payments', userEmail],
     queryFn: () => fetchPaymentsByEmail(userEmail),
-    enabled: !!userEmail, // Only run if email is present
+    enabled: !!userEmail, 
   });
 
   if (isLoading) {
