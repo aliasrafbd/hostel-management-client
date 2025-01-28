@@ -22,7 +22,7 @@ const AllReviews = () => {
         queryKey: ["mealstable", currentPage, itemsPerPage],
         queryFn: async ({ queryKey }) => {
             const [, currentPage, itemsPerPage] = queryKey;
-            const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`);
+            const response = await axiosSecure.get(`/reviews?page=${currentPage}&size=${itemsPerPage}`);
             return response.data;
         },
         keepPreviousData: true,

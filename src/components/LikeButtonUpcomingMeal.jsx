@@ -19,12 +19,8 @@ const LikeButtonUpcomingMeal = ({ meal, userEmails, initialReaction, onReactionU
     //     return <Loading></Loading>
     // }
 
-    console.log(isPremiumMember);
-
-     
     // Function to increment the notification count
     const incrementNotification = () => {
-        console.log("Clicked for noti");
         setNotificationCount((prevCount) => prevCount + 1);
     };
 

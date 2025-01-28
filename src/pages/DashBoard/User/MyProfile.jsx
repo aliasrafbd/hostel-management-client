@@ -6,7 +6,7 @@ import axios from 'axios';
 // Function to fetch user data by email
 const fetchUserByEmail = async (email) => {
     try {
-        const response = await axios.get(`http://localhost:5000/users/email/${email}`);
+        const response = await axios.get(`http://localhost:5000/users/email/${email}`, {withCredentials: true});
         return response.data;
     } catch (error) {
         throw error;
@@ -16,6 +16,7 @@ const fetchUserByEmail = async (email) => {
 
 const MyProfile = () => {
     const { user } = useContext(AuthContext);
+    
     const userEmail = user?.email;
 
     // Use useQuery to fetch user data

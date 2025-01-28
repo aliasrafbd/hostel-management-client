@@ -81,7 +81,7 @@ const UpdateMeal = () => {
         console.log(UpdatedNewMealData);
 
         try {
-            const response = await axios.put(`http://localhost:5000/meals/${_id}`, UpdatedNewMealData);
+            const response = await axiosSecure.put(`/meals/${_id}`, UpdatedNewMealData);
             if (response.data.modifiedCount > 0) {
                 Swal.fire({
                     title: "Success!",

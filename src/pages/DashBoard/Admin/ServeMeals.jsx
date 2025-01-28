@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ServeMeals = () => {
     const { user, loading } = useContext(AuthContext);
@@ -9,18 +10,15 @@ const ServeMeals = () => {
     const [userEmail, setUserEmail] = useState("");
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+    const axiosSecure = useAxiosSecure();
 
     const { data, isLoading, error, refetch } = useQuery({
         queryKey: ["servedMeals", currentPage, itemsPerPage, name, userEmail],
         queryFn: async () => {
-            const response = await fetch(
-                `http://localhost:5000/servedmeals?page=${currentPage}&size=${itemsPerPage}&name=${name}&userEmail=${userEmail}`
-            );
-            if (!response.ok) {
-                throw new Error("Failed to fetch meals.");
-            }
-            return response.json();
-        },
+            const response = await axiosSecure.get(
+                `http://localhost:5000/servedmeals?page=${currentPage}&size=${itemsPerPage}&name=${name}&userEmail=${userEmail}`)
+                return response.data;
+            },
         keepPreviousData: true,
     });
 
@@ -35,7 +33,7 @@ const ServeMeals = () => {
 
     const handleServe = async (mealId) => {
         try {
-            const response = await axios.patch(`http://localhost:5000/servedmeals/${mealId}`, {
+            const response = await axiosSecure.patch(`http://localhost:5000/servedmeals/${mealId}`, {
                 status: "delivered",
             });
     

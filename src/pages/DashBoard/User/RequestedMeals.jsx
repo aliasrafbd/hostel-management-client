@@ -7,7 +7,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const fetchRequestedMeals = async (email) => {
-    const response = await axios.get(`http://localhost:5000/requestedmeals/${email}`);
+    const response = await axios.get(`http://localhost:5000/requestedmeals/${email}`, { withCredentials: true });
     return response.data.requestedMeals || [];
 };
 

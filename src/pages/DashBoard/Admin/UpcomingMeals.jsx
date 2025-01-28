@@ -72,7 +72,6 @@ const UpcomingMeals = () => {
     
     // Function to increment the notification count
     const incrementNotification = () => {
-        console.log("Clicked for noti");
         setNotificationCount((prevCount) => prevCount + 1);
     };
 
@@ -98,7 +97,7 @@ const UpcomingMeals = () => {
     });
 
     const handleReactionUpdate = (meal, newReactionCount) => {
-        if (newReactionCount === 1) {
+        if (newReactionCount === 10) {
             publishMeal.mutate(meal._id);
         }
     };

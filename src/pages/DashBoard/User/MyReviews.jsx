@@ -8,7 +8,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const fetchReviewsByEmail = async (email) => {
-    const response = await axios.get(`http://localhost:5000/reviews/${email}`);
+    const response = await axios.get(`http://localhost:5000/reviews/${email}`, {withCredentials: true});
     return response.data;
 };
 
@@ -16,7 +16,6 @@ const MyReviews = () => {
     const { user } = useContext(AuthContext);
     const userEmail = user?.email;
     const navigate = useNavigate();
-    const axiosSecure = useAxiosSecure();
 
     const { data: reviews = [], isLoading, error, refetch } = useQuery({
         queryKey: ['reviews', userEmail],

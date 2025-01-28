@@ -5,7 +5,7 @@ import { AuthContext } from '../../../providers/AuthProvider';
 
 // Fetch payments by email
 const fetchPaymentsByEmail = async (email) => {
-  const response = await axios.get(`http://localhost:5000/payments/${email}`);
+  const response = await axios.get(`http://localhost:5000/payments/${email}`, {withCredentials: true});
   return response.data.data; // Access the "data" key in the response
 };
 

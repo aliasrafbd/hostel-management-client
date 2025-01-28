@@ -22,9 +22,7 @@ const MealsTable = () => {
         queryKey: ['meals', { sortBy, currentPage, itemsPerPage }], // Include `sortBy`, `page`, and `size` in the query key
         queryFn: async ({ queryKey }) => {
             const [, { sortBy, page, size }] = queryKey; // Destructure queryKey
-            const response = await axiosSecure.get(`/mealssorted?sort=${sortBy}&page=${currentPage}&size=${itemsPerPage}`, {
-                
-            });
+            const response = await axiosSecure.get(`/mealssorted?sort=${sortBy}&page=${currentPage}&size=${itemsPerPage}`);
             return response.data;
         },
         staleTime: 10000, // Cache data for 10 seconds

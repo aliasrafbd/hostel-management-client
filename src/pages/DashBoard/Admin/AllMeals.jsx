@@ -32,7 +32,7 @@ const AllMeals = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/meals/search?q=${searchTerm}`);
+            const response = await axios.get(`http://localhost:5000/meals/search?q=${searchTerm}`, {withCredentials: true});
             setSearchResults(response.data);
         } catch (error) {
             console.error("Error fetching search results:", error);
