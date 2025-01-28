@@ -5,14 +5,12 @@ import useAdmin from '../hooks/useAdmin';
 const DashBoard = () => {
 
 
-    // TODO: get isAdmin value from the Database;
     const [isAdmin] = useAdmin();
-    
+
     console.log(isAdmin);
 
     return (
         <div className='flex mx-auto gap-8'>
-            {/* Dashboard SideBar */}
             <div className='w-28 md:w-64 min-h-screen bg-orange-600'>
                 <ul className='menu p-4 space-y-2'>
                     {

@@ -13,7 +13,7 @@ const AdminProfile = () => {
             const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`);
             return response.data;
         },
-        enabled: !!user?.email, // Ensure the query only runs if adminId is provided
+        enabled: !!user?.email, 
     });
 
     if (isLoading) {

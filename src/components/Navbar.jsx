@@ -17,11 +17,6 @@ const Navbar = () => {
     const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
     const closeDropdown = () => setIsDropdownOpen(false);
 
-    // const { pathname } = useLocation();
-
-    // console.log(user);
-
-    // Function to increment the notification count
     const incrementNotification = () => {
 
         setNotificationCount((prevCount) => prevCount + 1);
@@ -75,7 +70,6 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Navbar Center */}
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">{Links}</ul>
                 </div>
@@ -96,7 +90,7 @@ const Navbar = () => {
                 <div className="navbar-end">
 
                     <div className="flex gap-4 justify-center items-center">
-                        {/* Profile Picture and Dropdown */}
+                       
                         {user ? (
                             <div className="relative">
                                 <img
@@ -152,6 +146,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-{/*  */ }

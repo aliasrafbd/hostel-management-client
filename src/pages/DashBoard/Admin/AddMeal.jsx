@@ -9,20 +9,18 @@ import { imageUpload } from '../../../api/utils';
 const AddMeal = () => {
 
     const { user, notificationCount, setNotificationCount } = useContext(AuthContext);
-    const [buttonText, setButtonText] = useState('Add'); // State for button text
+    const [buttonText, setButtonText] = useState('Add'); 
 
-    // const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
 
     const getBDTTime = () => {
         const now = new Date();
-        const utcOffset = now.getTimezoneOffset() * 60000; // Local offset in milliseconds
-        const bdtOffset = 6 * 60 * 60000; // BDT is UTC+6
+        const utcOffset = now.getTimezoneOffset() * 60000; 
+        const bdtOffset = 6 * 60 * 60000; 
         const bdtDate = new Date(now.getTime() + utcOffset + bdtOffset);
 
-        // Format date to YYYY-MM-DDTHH:mm
         const year = bdtDate.getFullYear();
-        const month = String(bdtDate.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+        const month = String(bdtDate.getMonth() + 1).padStart(2, "0"); 
         const day = String(bdtDate.getDate()).padStart(2, "0");
         const hours = String(bdtDate.getHours()).padStart(2, "0");
         const minutes = String(bdtDate.getMinutes()).padStart(2, "0");
@@ -30,7 +28,6 @@ const AddMeal = () => {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-    // Function to increment the notification count
     const incrementNotification = () => {
         console.log("Clicked for noti");
         setNotificationCount((prevCount) => prevCount + 1);
@@ -47,9 +44,9 @@ const AddMeal = () => {
 
         setButtonText('Adding');
         
-        const formattedPostTime = data.postTime.replace("T", " "); // Replace "T" with a space
+        const formattedPostTime = data.postTime.replace("T", " "); 
 
-            const imageFile = data.image[0]; // Ensure this is a valid File object
+            const imageFile = data.image[0]; 
 
             const imageURL = await imageUpload(imageFile);
             console.log('Uploaded Image URL:', imageURL);
@@ -69,7 +66,6 @@ const AddMeal = () => {
             reviews: [],
         }
 
-        // now send the the add meal data with the image url 
         const mealData = {
             ...newData,
             price: parseInt(price),
@@ -81,7 +77,7 @@ const AddMeal = () => {
         console.log(mealData);
 
         const mealRes = await axiosSecure.post('/meals', mealData)
-        // show success message 
+        
         if (mealRes.data.insertedId) {
             Swal.fire({
                 position: "top",
@@ -214,7 +210,7 @@ const AddMeal = () => {
 
                 <div className='col-span-2 mx-auto'>
                     <button type="submit" className="btn btn-primary w-xsm" disabled={buttonText === 'Adding'}>
-                        {buttonText} {/* Display button text */}
+                        {buttonText} 
                     </button>
                 </div>
             </form>

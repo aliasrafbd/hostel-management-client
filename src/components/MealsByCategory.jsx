@@ -14,26 +14,14 @@ const MealsByCategory = ({ meals }) => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
-    const [search, setSearch] = useState(""); // State for search input
+    const [search, setSearch] = useState(""); 
     const [category, setCategory] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
 
-    // const { data: meals, isLoading, error } = useQuery({
-    //     queryKey: ['meals'], // Unique key for the query
-    //     queryFn: async () => {
-    //         const response = await axiosSecure('/meals/hostel');
-    //         return response.data; // Return the data from the response
-    //     },
-    // })
 
     console.log(meals);
 
-    // if(isLoading) {
-    //     return <span class="loader"></span>
-    // }
-
-    // console.log(data?.data);
 
     const breakfast = meals?.filter((meal) => meal.category === "Breakfast");
     const lunch = meals?.filter((meal) => meal.category === "Lunch");

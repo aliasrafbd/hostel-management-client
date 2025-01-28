@@ -1,9 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import SectionHeading from './SectionHeading';
 
 function Packages() {
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate(); 
 
     const packages = [
         {
@@ -29,7 +29,6 @@ function Packages() {
         }
     ];
 
-    // Function to handle navigation
     const handleRedirect = (packageName) => {
         navigate(`/checkout/${packageName.toLowerCase()}`);
     };
@@ -42,7 +41,7 @@ function Packages() {
                     <div
                         key={pkg.name}
                         className={`p-6 rounded-lg shadow-lg ${pkg.bgColor} cursor-pointer`}
-                        onClick={() => handleRedirect(pkg.name)} // Navigate on card click
+                        onClick={() => handleRedirect(pkg.name)} 
                     >
                         <h2 className={`text-2xl font-semibold ${pkg.textColor}`}>
                             {pkg.name} Package
@@ -63,7 +62,7 @@ function Packages() {
                                 pkg.textColor
                             } border border-current hover:bg-opacity-10`}
                             onClick={(e) => {
-                                e.stopPropagation(); // Prevent card click from triggering
+                                e.stopPropagation(); 
                                 handleRedirect(pkg.name);
                             }}
                         >

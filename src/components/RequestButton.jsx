@@ -11,12 +11,6 @@ const RequestButton = ({ meal }) => {
     
     const { user } = useContext(AuthContext);
 
-    // const [isPremiumMember, isMemberLoading] = usePremiumMember(true);
-
-    // if (isMemberLoading) {
-    //     return <Loading></Loading>
-    // }
-
     const [isRequested, setIsRequested] = useState(false);
 
     const axiosSecure = useAxiosSecure();
@@ -62,8 +56,6 @@ const RequestButton = ({ meal }) => {
             });
         }
     }
-
-    // console.log(requestedMeal);
 
     return (
         <div>
