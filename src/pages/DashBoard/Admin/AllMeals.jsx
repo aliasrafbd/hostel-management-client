@@ -28,7 +28,7 @@ const AllMeals = () => {
         limit: 10,
     });
 
-    const { pathname } = useLocation(); // To detect the current route
+    const { pathname } = useLocation(); 
 
     const handleSearch = async () => {
         try {
@@ -57,8 +57,8 @@ const AllMeals = () => {
     };
 
     const handleUpdateClick = (meal) => {
-        setSelectedMeal(meal); // Set the selected meal
-        setModalOpen(true); // Open the modal
+        setSelectedMeal(meal); 
+        setModalOpen(true); 
     };
 
     if (error) {

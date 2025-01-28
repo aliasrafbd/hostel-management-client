@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from '../../../providers/AuthProvider';
 import axios from 'axios';
 
-// Function to fetch user data by email
 const fetchUserByEmail = async (email) => {
     try {
         const response = await axios.get(`http://localhost:5000/users/email/${email}`, {withCredentials: true});
@@ -19,12 +18,11 @@ const MyProfile = () => {
     
     const userEmail = user?.email;
 
-    // Use useQuery to fetch user data
     const { data: singleUser, isLoading, error } = useQuery({
-        queryKey: ['user', userEmail], // Unique query key
-        queryFn: () => fetchUserByEmail(userEmail), // Fetch function
-        enabled: !!userEmail, // Ensures the query only runs when userEmail is available
-        keepPreviousData: true, // Ensures smoother transitions when the data changes
+        queryKey: ['user', userEmail], 
+        queryFn: () => fetchUserByEmail(userEmail), 
+        enabled: !!userEmail, 
+        keepPreviousData: true, 
     });
 
     if (isLoading) {

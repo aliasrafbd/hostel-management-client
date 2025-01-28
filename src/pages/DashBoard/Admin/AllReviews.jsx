@@ -42,17 +42,16 @@ const AllReviews = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // Update the reviews for the meal to zero
+                    
                     const updatedReviews = {
                         review_count: 0,
-                        reviews: [], // Empty the reviews array
+                        reviews: [], 
                     };
     
-                    // Make API call to update the meal's reviews
                     await axiosSecure.put(`/mealssorted/${id}/reviews`, updatedReviews);
     
                     Swal.fire('Reset!', 'The reviews have been reset.', 'success');
-                    refetch(); // Refetch meals after the update
+                    refetch(); 
                 } catch (err) {
                     Swal.fire('Error', 'Failed to reset the reviews.', 'error');
                 }

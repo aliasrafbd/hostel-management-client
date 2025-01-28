@@ -28,7 +28,6 @@ const UpcomingMeals = () => {
 
     console.log("He is a premium Member", PremiumMember);
 
-    // Fetch total count for pagination
     useEffect(() => {
         const fetchCount = async () => {
             const response = await axiosSecure.get('/upcomingmealscount');
@@ -40,7 +39,6 @@ const UpcomingMeals = () => {
     const numberOfPages = Math.ceil(upcomingMealsCount / itemsPerPage);
     const pages = [...Array(numberOfPages).keys()];
 
-    // Fetch meals
     const { data: upcomingMeals = [], isLoading, refetch } = useQuery({
         queryKey: ['upcomingmeals', { currentPage, itemsPerPage }],
         queryFn: async ({ queryKey }) => {
@@ -50,27 +48,22 @@ const UpcomingMeals = () => {
             );
             return response.data;
         },
-        // staleTime: 10000,
-        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+        
+        refetchOnWindowFocus: false, 
     });
 
 
-    // Fetch all upcoming meals (no pagination)
     const { data: upcomingMealsAll = [], isLoading: isLoadingAllUpcoming, refetch: refetchAllUpcoming } = useQuery({
-        queryKey: ['upcomingmealsall'], // Removed pagination parameters from queryKey
+        queryKey: ['upcomingmealsall'], 
         queryFn: async () => {
-            const response = await axiosSecure.get(`/upcomingmealsall`); // Endpoint without pagination parameters
+            const response = await axiosSecure.get(`/upcomingmealsall`); 
             return response.data;
         },
-        // staleTime: 10000,
-        refetchOnWindowFocus: false, // Keeps it from unnecessary refetching on focus
+        
+        refetchOnWindowFocus: false, 
     });
 
 
-    // if (isLoading) return <div>Loading...</div>;
-
-    
-    // Function to increment the notification count
     const incrementNotification = () => {
         setNotificationCount((prevCount) => prevCount + 1);
     };
@@ -78,7 +71,6 @@ const UpcomingMeals = () => {
     console.log("total Notifications", notificationCount);
 
 
-    // Publish meal mutation
     const publishMeal = useMutation({
         mutationFn: async (id) => {
             const response = await axiosSecure.post(`/publish-meal/${id}`);
@@ -92,7 +84,7 @@ const UpcomingMeals = () => {
             });
             incrementNotification();
             queryClient.invalidateQueries(['upcomingmeals']);
-            refetch(); // Refetch meals after publishing
+            refetch(); 
         },
     });
 
@@ -121,12 +113,11 @@ const UpcomingMeals = () => {
             <SectionHeading title="Upcoming Meals"></SectionHeading>
             {isModalOpen && <AddMealWithModal closeModal={closeModal} refetch={refetch} />}
 
-            {/* Table or Card Layout */}
             {pathname === '/dashboard/upcomingmeals' ? (
                 <>
 
                     <div className="flex flex-col h-full">
-                        {/* Table Container */}
+                        
                         <div className="h-[500px] overflow-x-auto">
                             <table className="table w-full">
                                 <thead className='text-center'>
@@ -169,7 +160,6 @@ const UpcomingMeals = () => {
                             </button>
                         </div>
 
-                        {/* Fixed Pagination */}
                         <div className="sticky bottom-0 bg-white border-t mt-4 flex justify-center gap-2 py-2">
                             <button
                                 className="btn btn-secondary"
