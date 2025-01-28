@@ -80,7 +80,7 @@ const AddMeal = () => {
         }
         console.log(mealData);
 
-        const mealRes = await axiosSecure.post('/meals', mealData, {withCredentials: true})
+        const mealRes = await axiosSecure.post('/meals', mealData)
         // show success message 
         if (mealRes.data.insertedId) {
             Swal.fire({

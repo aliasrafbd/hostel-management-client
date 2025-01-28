@@ -22,13 +22,8 @@ const AllReviews = () => {
         queryKey: ["mealstable", currentPage, itemsPerPage],
         queryFn: async ({ queryKey }) => {
             const [, currentPage, itemsPerPage] = queryKey;
-            const response = await fetch(
-                `http://localhost:5000/reviews?page=${currentPage}&size=${itemsPerPage}`
-            );
-            if (!response.ok) {
-                throw new Error("Failed to fetch meals.");
-            }
-            return response.json();
+            const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`);
+            return response.data;
         },
         keepPreviousData: true,
         staleTime: 5000,

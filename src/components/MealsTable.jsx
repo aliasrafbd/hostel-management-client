@@ -8,7 +8,6 @@ const MealsTable = () => {
     const axiosSecure = useAxiosSecure();
     const [sortBy, setSortBy] = useState('reaction'); // Default sort by "reaction"
 
-
     const [itemsPerPage, setItemsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(0)
 
