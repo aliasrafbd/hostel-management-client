@@ -10,8 +10,8 @@
 
 
 2. **Admin Info** <br>
-   Admin Email: aliasrafpowergrid@gmail.com
-   Admin Name: Asraf Ali
+   Admin Email: aliasrafchakoria@gmail.com
+   Admin Name: Ali Asraf
    Password: 123456
 
 
