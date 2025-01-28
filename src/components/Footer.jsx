@@ -1,23 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
         <footer className="footer bg-base-300 mx-auto text-base-content p-10">
-            <div className='max-w-7xl mx-auto grid justify-between grid-cols-3'>
+            <div className='max-w-7xl mx-auto block space-y-6 md:space-y-0 md:grid justify-between gap-32 grid-cols-3'>
                 <nav className='flex flex-col gap-4'>
-                    <h6 className="footer-title">Services</h6>
-                    <a className="link link-hover">Login</a>
-                    <a className="link link-hover">Register</a>
+                    <h6 className="text-center md:text-2xl text-xl font-extrabold footer-title">PoroshMoni Hostel-Chattogram</h6>
                 </nav>
                 <nav className='flex flex-col gap-4'>
-                    <h6 className="footer-title">PoroshMoni Hostel-Chattogram</h6>
-                    <a className="link link-hover">About us</a>
-                    <a className="link link-hover">Contact</a>
+                    <Link to="/login">Login</Link>
+                    <Link to="/register">Register</Link>
                 </nav>
                 <nav>
-                    <h6 className="footer-title">Social</h6>
+                    <h6 className="md:mb-0 lg:mb-4 md:mt-0 mb-4 mt-12 footer-title">Social</h6>
                     <div className="grid grid-flow-col gap-4">
-                        <a>
+                        <a href='https://x.com/asrafali_bd'>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -39,7 +37,7 @@ const Footer = () => {
                                     d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
                             </svg>
                         </a>
-                        <a>
+                        <a href='https://www.facebook.com/aliasraf15'>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -52,9 +50,6 @@ const Footer = () => {
                         </a>
                     </div>
                 </nav>
-                <div className='mx-auto max-w-7xl flex justify-center'>
-                    <p className=''>Address: Chawkbazar (besides Chittagong College), Chittagong.</p>
-                </div>
             </div>
         </footer>
     );
