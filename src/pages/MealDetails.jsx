@@ -125,7 +125,7 @@ const MealDetails = () => {
     return (
         <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg">
             {/* Meal Details Section  */}
-            <div className='grid grid-cols-2 mb-20 gap-12'>
+            <div className='grid grid-cols-1 md:grid-cols-2 mb-20 gap-12'>
                 <div>
                     <img className='w-full rounded-lg' src={data.image} alt="" />
                     <div className='grid grid-cols-2'>
@@ -156,7 +156,7 @@ const MealDetails = () => {
 
                 <div className='w-1/2'>
                     <h1 className="text-3xl font-bold mb-4">{title}</h1>
-                    
+
                     <p>Ingredients: {ingredients}</p>
                     <p>Description: {description}</p>
                     <p>Total Review: {reviews.review_count}</p>
@@ -173,34 +173,41 @@ const MealDetails = () => {
 
             {/* Review Section  */}
             <div>
-                <div>
-                    <textarea
-                        className='textarea textarea-primary w-full'
-                        value={review}
-                        onChange={(e) => setReview(e.target.value)}  
-                        placeholder="Write your review here"
-                    />
+                <div className='grid gap-6 grid-cols-1 md:grid-cols-2 mb-20 items-center justify-between'>
+                    <div className={isRatingClicked ? 'hidden' : 'flex gap-2 items-center'}>
+                        <p>Rate <span className='font-bold text-orange-600'>{title}</span>:</p>
+                        <ReactStars
+                            count={5}
+                            value={rate} // User's initial input value
+                            onChange={handleUpdateRating}
+                            size={30}
+                            activeColor="#ffd799"
+                        />
+                    </div>
+                    <div className='flex gap-4 items-center'>
+                        <div className='w-full'>
+                            <div>
+                                <textarea
+                                    className='textarea textarea-primary w-full'
+                                    value={review}
+                                    rows={3}
+                                    onChange={(e) => setReview(e.target.value)}
+                                    placeholder="Write your review here"
+                                />
+                            </div>
+                            <div>
+                                {/* Display message */}
+                                {message && <p className='text-red-600'>{message}</p>}
+                            </div>
+                        </div>
+                        <div>
+                            <button className='btn btn-secondary block text-center mx-auto my-2' onClick={handleReviewSubmit}>Post Review</button>
+                        </div>
+                    </div>
                 </div>
-                {/* Display message */}
-                {message && <p className='text-red-600'>{message}</p>}
-
-                <button className='btn btn-secondary block text-center mx-auto my-2' onClick={handleReviewSubmit}>Post Review</button>
-
-                <div className={isRatingClicked ? 'hidden' : 'flex gap-2 items-center'}>
-                    <p>Rate Us: {title}</p>
-                    <ReactStars
-                        count={5}
-                        value={rate} // User's initial input value
-                        onChange={handleUpdateRating}
-                        size={30}
-                        activeColor="#ffd799"
-                    />
-                </div>
-
 
                 {/* Display reviews */}
                 <div>
-                    <h3 className='text-center font-bold my-12 text-3xl'>{title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()} Reviews:</h3>
                     {data.reviews.reviews.length > 0 ? (
                         data.reviews.reviews.map((rev, index) => (
                             <div key={index}>

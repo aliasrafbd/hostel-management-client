@@ -64,9 +64,7 @@ const ManageUsers = () => {
     };
 
     return (
-        <div className="manage-users">
-            <h2 className="text-xl font-bold mb-4">Manage Users</h2>
-            
+        <div className="manage-users my-6">
             <div className="flex gap-4 mb-4">
                 <input
                     type="text"

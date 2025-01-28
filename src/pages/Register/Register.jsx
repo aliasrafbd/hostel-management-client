@@ -66,12 +66,12 @@ function Register() {
     };
 
     return (
-        <div className='register-bg'>
+        <div className='register-bg h-[850px]'>
             <div className='register-overlay'></div>
-            <div className="register-form max-w-7xl mx-auto">
-                <h1 className='text-center font-bold text-4xl mb-6'>Welcome to <br /> <span className='text-orange-700'>Hostel Management System</span></h1>
+            <div className="register-form top-[50%] w-[95%] md:w-[75%] lg:w-[65%] mx-auto">
+                <h1 className='text-center font-bold md:text-4xl text-xl mb-6'>Welcome to <br /> <span className='text-orange-700'>Hostel Management System</span></h1>
                 <h2 className='text-center font-bold text-3xl'>Register</h2>
-                <hr className='my-4 max-w-sm mx-auto border-slate-400 border-2' />
+                <hr className='my-4 max-w-3xl mx-auto border-slate-400 border-2' />
                 <div className='flex gap-6'>
                     <div className='flex-1 flex flex-col justify-center'>
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -83,7 +83,7 @@ function Register() {
                                     id="displayName"
                                     placeholder="Enter your name"
                                     {...register('displayName', { required: "Name is required" })}
-                                    className='rounded-md'
+                                    className='rounded-md w-full'
                                     style={{ width: '100%', padding: '8px', fontSize: '14px' }}
                                 />
                                 {errors.displayName && <p style={{ color: 'red', fontSize: '12px' }}>{errors.displayName.message}</p>}
@@ -170,7 +170,7 @@ function Register() {
                         <LoginWithGoogle></LoginWithGoogle>
                         <p className='text-center'>Already have an account? <Link className='text-blue-800 hover:font-bold' to="/login">Login</Link></p>
                     </div>
-                    <div className='w-1/2 flex justify-center items-center'>
+                    <div className='w-1/2 hidden lg:flex justify-center items-center'>
                         <Lottie className='w-[70%]' animationData={LottieDataRegister}></Lottie>
                     </div>
                 </div>

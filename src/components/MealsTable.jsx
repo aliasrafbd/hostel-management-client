@@ -101,8 +101,7 @@ const MealsTable = () => {
     };
 
     return (
-        <div className="overflow-x-auto">
-            <h1 className="text-2xl font-bold mb-4">Meals Table</h1>
+        <div className="my-6">
             <div className="mb-4">
                 <label className="mr-2">Sort By:</label>
                 <select
@@ -114,7 +113,7 @@ const MealsTable = () => {
                     <option value="reviews">Review Count</option>
                 </select>
             </div>
-            <div className='h-[600px]'>
+            <div className='overflow-x-auto lg:overflow-x-hidden h-[600px]'>
                 <table className="table w-full">
                     <thead>
                         <tr>
@@ -134,7 +133,7 @@ const MealsTable = () => {
                                 <td>{meal?.reaction?.count}</td>
                                 <td>{meal?.reviews?.review_count}</td>
                                 <td>{meal.distributorName || 'N/A'}</td>
-                                <td>
+                                <td className='flex'>
                                     <Link to={`/meal/${meal._id}`}><button
                                         className="btn btn-info btn-sm mr-2"
                                         onClick={() => handleViewMeal(meal._id)}

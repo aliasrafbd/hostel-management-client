@@ -54,7 +54,7 @@ const ServeMeals = () => {
     return (
         <div>
             {/* Search Form */}
-            <form onSubmit={handleSearch} className="mb-4 flex gap-4">
+            <form onSubmit={handleSearch} className="my-4 flex gap-4">
                 <input
                     type="text"
                     placeholder="Search by name"

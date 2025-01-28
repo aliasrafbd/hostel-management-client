@@ -102,11 +102,11 @@ const AddMeal = () => {
     return (
         <div className='w-[90%] mx-auto my-6'>
             <SectionHeading title="Add a Meal"></SectionHeading>
-            <form onSubmit={handleSubmit(onSubmit)} className="gap-2 grid grid-cols-2">
+            <form onSubmit={handleSubmit(onSubmit)} className="md:grid space-y-2 md:space-y-0 block md:grid-cols-2">
             
                 {/* Title */}
-                <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Title</label>
+                <div className=''>
+                    <label className="block text-sm font-medium text-gray-700">Title</label>
                     <input
                         type="text"
                         {...register("title", { required: "Title is required" })}

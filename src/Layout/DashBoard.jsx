@@ -11,7 +11,7 @@ const DashBoard = () => {
     return (
         <div className='flex mx-auto gap-8'>
             {/* Dashboard SideBar */}
-            <div className='w-64 min-h-screen bg-orange-600'>
+            <div className='w-28 md:w-64 min-h-screen bg-orange-600'>
                 <ul className='menu p-4 space-y-2'>
                     {
                         isAdmin ?
@@ -39,8 +39,7 @@ const DashBoard = () => {
                 </ul>
 
                 {/* Home  */}
-                <button className='btn btn-secondary m-4'><NavLink to="/">Back to Home</NavLink></button>
-
+                <button className='btn btn-secondary text-md m-4'><NavLink to="/">Home</NavLink></button>
             </div>
 
             {/* Dashboard Content  */}

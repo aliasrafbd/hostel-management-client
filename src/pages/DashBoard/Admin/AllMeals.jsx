@@ -73,7 +73,7 @@ const AllMeals = () => {
                 <div className="mx-auto max-w-7xl my-4">
                     <div className="mb-4">
                         <select
-                            className="select select-bordered w-full max-w-md mb-2"
+                            className="select select-bordered w-[90%] lg:w-full ml-2 lg:ml-0 max-w-md mb-2"
                             value={category}
                             onChange={(e) => {
                                 setPage(1);
@@ -87,14 +87,14 @@ const AllMeals = () => {
                         </select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:px-0 px-2 gap-4">
                         <div>
                             <p className="my-4">Sort by Price:</p>
                             <div className="flex gap-4">
                                 <input
                                     type="number"
                                     placeholder="Min Price"
-                                    className="input input-bordered"
+                                    className="input input-bordered w-[100px] lg:w-[200px]"
                                     value={minPrice}
                                     onChange={(e) => {
                                         setPage(1);
@@ -104,7 +104,7 @@ const AllMeals = () => {
                                 <input
                                     type="number"
                                     placeholder="Max Price"
-                                    className="input input-bordered"
+                                    className="input input-bordered w-[100px] lg:w-[200px]"
                                     value={maxPrice}
                                     onChange={(e) => {
                                         setPage(1);
@@ -118,7 +118,7 @@ const AllMeals = () => {
                             <div className="flex items-center mb-4">
                                 <p className="mr-4">Search by:</p>
                                 <select
-                                    className="select select-bordered w-full max-w-xs"
+                                    className="select select-bordered w-[60%] lg:w-full max-w-xs"
                                     value={selectedInput}
                                     onChange={(e) => setSelectedInput(e.target.value)}
                                 >
@@ -131,7 +131,7 @@ const AllMeals = () => {
                                 <input
                                     type="text"
                                     placeholder="Search meals..."
-                                    className="input input-bordered w-[95%] mb-2"
+                                    className="input input-bordered md:w-[96%] ml-0 w-full lg:w-full md:ml-3 lg:ml-0 mb-4"
                                     value={search}
                                     onChange={(e) => {
                                         setPage(1);
@@ -139,7 +139,7 @@ const AllMeals = () => {
                                     }}
                                 />
                             ) : (
-                                <div className="flex items-center w-[95%]">
+                                <div className="flex mb-4 items-center w-[100%]">
                                     <input
                                         type="text"
                                         placeholder="Search meals..."
@@ -165,7 +165,7 @@ const AllMeals = () => {
                             hasMore={pagination.page < pagination.totalPages}
                             loader={<p className='text-center py-4'>Loading more meals...</p>}
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-3 my-4 gap-4">
+                            <div className="grid grid-cols-1 mb-6 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {(searchResults.length ? searchResults : meals).map((meal) => (
                                     <MealCard key={meal._id} meal={meal}></MealCard>
                                 ))}

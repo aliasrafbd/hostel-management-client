@@ -54,30 +54,12 @@ function Login() {
 
 
     return (
-        <div className='login-bg'>
+        <div className='login-bg h-[650px]'>
             <div className='login-overlay'></div>
-            <div className="login-form max-w-7xl mx-auto">
-
-                <motion.h2
-                    animate={
-                        { x: [0, 200, -200] }
-                    }
-                    transition={
-                        { duration: 8, ease: easeOut, repeat: Infinity }
-                    }
-
-                    className="mb-12 text-sm md:text-4xl font-bold">Welcome to <motion.span
-                        animate={
-                            { color: ['#33df33', '#55ffff', '#ff6133'], }
-                        }
-                        transition={
-                            { duration: 1.5, repeat: Infinity }
-                        }
-
-                    >Poroshmoni Hostel</motion.span> </motion.h2>
-                <h1 className='text-center font-bold text-3xl mb-6'>Login</h1>
-
-                <hr className='my-4 max-w-sm mx-auto border-slate-400 border-2' />
+            <div className="login-form top-[50%] w-[95%] md:w-[75%] lg:w-[65%] mx-auto">
+                <h2 className='text-3xl font-extrabold mb-6'>Welcome to Poroshmoni Hostel</h2>
+                <h1 className='text-red-600 text-center font-bold text-3xl'>Login</h1>
+                <hr className='my-4 max-w-3xl mx-auto border-slate-400 border-2' />
                 <div className='flex gap-6'>
                     <div className='flex-1 flex flex-col justify-center'>
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -142,7 +124,7 @@ function Login() {
                         <LoginWithGoogle></LoginWithGoogle>
                         <p className='text-center'>Do not have a account? Please <Link className='text-blue-800 hover:font-bold' to="/register">Register</Link> </p>
                     </div>
-                    <div className='w-1/2 flex justify-center items-center'>
+                    <div className='w-1/2 hidden lg:flex justify-center items-center'>
                         <Lottie className='w-[70%]' animationData={LottieDataLogin}></Lottie>
                     </div>
                 </div>

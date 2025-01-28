@@ -41,7 +41,7 @@ const MyProfile = () => {
     return (
         <div className="profile max-w-md mx-auto p-4 mt-12 border rounded-lg shadow-lg">
             <h2 className="text-xl text-center font-bold mb-4">My Profile</h2>
-            <img className='mx-auto rounded-full' src={user?.photoURL} alt="" />
+            <img className='mx-auto h-48 w-48 rounded-full' src={user?.photoURL} alt="" />
             <p className="text-lg">
                 <strong>Name:</strong> {singleUser.name}
             </p>

@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../providers/AuthProvider';
 import SectionHeading from '../../../components/SectionHeading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
 const fetchRequestedMeals = async (email) => {
     const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${email}`, { withCredentials: true });
@@ -11,14 +13,18 @@ const fetchRequestedMeals = async (email) => {
 
 const RequestedMeals = () => {
     const { user } = useContext(AuthContext);
+
+    const axiosSecure = useAxiosSecure();
+    
     const userEmail = user?.email;
 
     // Destructuring useQuery response
-    const { data: meals = [], isLoading, error } = useQuery({
+    const { data: meals = [], isLoading, error, refetch } = useQuery({
         queryKey: ['requestedMeals', userEmail],
         queryFn: () => fetchRequestedMeals(userEmail),
         enabled: !!userEmail,
     });
+
 
     // Cancel handler
     const handleCancel = (mealId) => {
@@ -33,6 +39,28 @@ const RequestedMeals = () => {
     if (error) {
         return <div className="text-red-500">{error.response?.data.message || 'Failed to fetch requested meals'}</div>;
     }
+
+    const handleDeleteReqMeal = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        await axiosSecure.delete(`/requestedmeals/${id}`);
+                        Swal.fire('Deleted!', 'Requested meals has been cancel.', 'success');
+                        refetch(); // Refetch meals after deletion
+                    } catch (err) {
+                        Swal.fire('Error', 'Failed to cancel the meal.', 'error');
+                    }
+                }
+            });
+        };
+
 
     return (
         <div className="container mx-auto p-4">
@@ -50,6 +78,7 @@ const RequestedMeals = () => {
                                 <th className="border border-gray-300 p-2">Likes</th>
                                 <th className="border border-gray-300 p-2">Reviews Count</th>
                                 <th className="border border-gray-300 p-2">Status</th>
+                                <th className="border border-gray-300 p-2">Action</th>
                             </tr>
                         </thead>
                         <tbody className='text-center'>
@@ -59,6 +88,14 @@ const RequestedMeals = () => {
                                     <td className="border border-gray-300 p-2">{meal.reviews?.reaction || 0}</td>
                                     <td className="border border-gray-300 p-2">{meal.reviews?.rating || 0}</td>
                                     <td className="border border-gray-300 p-2 capitalize">{meal.status || 'Pending'}</td>
+                                    <td className="border border-gray-300 p-2 capitalize">
+                                        <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => handleDeleteReqMeal(meal._id)}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

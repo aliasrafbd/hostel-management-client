@@ -130,12 +130,13 @@ const UpcomingMeals = () => {
                         {/* Table Container */}
                         <div className="h-[500px] overflow-x-auto">
                             <table className="table w-full">
-                                <thead>
+                                <thead className='text-center'>
                                     <tr>
                                         <th>#</th>
                                         <th>Title</th>
                                         <th>Category</th>
                                         <th>Reaction Count</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,10 +201,10 @@ const UpcomingMeals = () => {
 
                 </>
             ) : (
-                <div className="grid grid-cols-3 gap-6 my-6">
+                <div className="grid grid-cols-1 mb-6 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {upcomingMealsAll.map((meal) => (
                         <>
-                            <div className="card">
+                            <div className="card border border-gray-400 w-[95%] mx-auto">
                                 <figure className="relative">
                                     <img
                                         className="h-80 w-full transition-transform duration-300 group-hover:scale-110" // Scale on hover
@@ -242,8 +243,7 @@ const UpcomingMeals = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <h2 className="text-center text-md font-extrabold">{meal?.title}</h2>
-
+                                <h2 className="text-center text-md font-extrabold p-8">{meal?.title}</h2>
                             </div>
 
                         </>

@@ -26,7 +26,7 @@ const AdminProfile = () => {
     }
 
     return (
-        <div className="card w-96 mx-auto mt-6 pt-20 bg-gradient-to-r from-blue-50 to-blue-100 shadow-2xl rounded-xl overflow-hidden">
+        <div className="card md:w-96 w-60 mx-auto mt-6 pt-20 bg-gradient-to-r from-blue-50 to-blue-100 shadow-2xl rounded-xl overflow-hidden">
             <div className="flex flex-col items-center -mt-14">
                 <div className="w-28 h-28 rounded-full border-4 border-white shadow-md overflow-hidden">
                     <img
