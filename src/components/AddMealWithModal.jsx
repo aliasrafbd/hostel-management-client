@@ -29,12 +29,10 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
         setButtonText('Adding');
 
         try {
-            // Upload the image and get the URL
             console.log(data);
             const imageURL = await imageUpload(data.image[0]);
             console.log(imageURL);
 
-            // Prepare the meal data
             const mealData = {
                 ...data,
                 price: parseFloat(data.price),
@@ -44,11 +42,9 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
                 rating: 0,
             };
 
-            // Send the data to the backend
             const response = await axiosSecure.post('/upcomingmeals', mealData);
 
             if (response.data.insertedId) {
-                // Show success alert
                 Swal.fire({
                     position: "top",
                     icon: "success",
@@ -57,12 +53,10 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
                     timer: 1500,
                 });
 
-                // Refetch the meals list if applicable
                 if (refetch) {
                     refetch();
                 }
 
-                // Close the modal and reset the form
                 closeModal();
                 reset();
             }
@@ -158,14 +152,6 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
                     </div>
 
 
-                    {/* Post Time */}
-                    {/* <input
-            type="datetime-local"
-            {...register("postTime", { required: "Post time is required" })}
-            className="input input-bordered w-full"
-          />
-          {errors.postTime && <p className="text-red-500 text-sm">{errors.postTime.message}</p>} */}
-
                     {/* Image */}
                     <input
                         type="file"
@@ -181,7 +167,7 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
                         </button>
                         <div className='col-span-2 mx-auto'>
                             <button type="submit" className="btn btn-primary w-xsm" disabled={buttonText === 'Adding'}>
-                                {buttonText} {/* Display button text */}
+                                {buttonText} 
                             </button>
                         </div>
                     </div>
