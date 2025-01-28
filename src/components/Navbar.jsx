@@ -43,10 +43,9 @@ const Navbar = () => {
 
     return (
         <div className="bg-black text-white">
-            <div className="navbar mx-auto max-w-9xl lg:max-w-7xl px-4 lg:px-8 md:px-12">
+            <div className="navbar mx-auto max-w-7xl px-4 lg:px-8 md:px-12">
                 {/* Navbar Start */}
                 <div className="navbar-start">
-
                     <div className="dropdown mr-6 md:mr-12 lg:mr-0">
                         <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
                             <svg
@@ -66,7 +65,7 @@ const Navbar = () => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                            className="menu menu-sm dropdown-content text-black bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow"
                         >
                             {Links}
                         </ul>
@@ -80,7 +79,7 @@ const Navbar = () => {
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">{Links}</ul>
                 </div>
-                <div className='relative text-xl'>
+                <div className='relative ml-20 md:ml-80 mt-1 md:mt-2 lg:ml-0 text-xl'>
                     <button
                         className='relative focus:outline-none'
                     ><IoIosNotificationsOutline />

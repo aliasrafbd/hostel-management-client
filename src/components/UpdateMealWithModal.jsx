@@ -6,11 +6,8 @@ import { AuthContext } from "../providers/AuthProvider";
 import { imageUpload } from "../api/utils";
 
 const UpdateMealWithModal = ({ closeModal, refetch }) => {
-
     const axiosSecure = useAxiosSecure();
-
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
-
     const { user } = useContext(AuthContext);
 
     const reaction = {
@@ -22,7 +19,6 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
         review_count: 0,
         reviews: [],
     }
-
 
     const onSubmit = async (data) => {
         try {
@@ -78,7 +74,7 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
     return (
         <div className="modal modal-open">
             <div className="modal-box w-full max-w-2xl">
-                <h3 className="font-bold text-lg mb-4">Add a Meal</h3>
+                <h3 className="font-bold text-lg mb-4">Update Meal</h3>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Title */}
                     <input
@@ -155,14 +151,6 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
                     </div>
 
 
-                    {/* Post Time */}
-                    {/* <input
-            type="datetime-local"
-            {...register("postTime", { required: "Post time is required" })}
-            className="input input-bordered w-full"
-          />
-          {errors.postTime && <p className="text-red-500 text-sm">{errors.postTime.message}</p>} */}
-
                     {/* Image */}
                     <input
                         type="file"
@@ -177,7 +165,7 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
                             Cancel
                         </button>
                         <button type="submit" className="btn btn-primary">
-                            Add Meal
+                            Update
                         </button>
                     </div>
                 </form>

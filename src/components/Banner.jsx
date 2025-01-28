@@ -2,11 +2,11 @@ import React from "react";
 import usePremiumMember from "../hooks/usePremiumMember";
 import Loading from "./Loading";
 
-const Banner = ({search, setSearch}) => {
+const Banner = ({ search, setSearch }) => {
 
-    const {data:isPremiumMember, isLoading} = usePremiumMember();
-    
-    if(isLoading){
+    const { data: isPremiumMember, isLoading } = usePremiumMember();
+
+    if (isLoading) {
         return <Loading></Loading>
     }
 
@@ -14,18 +14,13 @@ const Banner = ({search, setSearch}) => {
 
     return (
         <>
-
-            <div
-                className="relative bg-cover w-full bg-fixed bg-center h-[150px] md:h-[600px]"
-                style={{ backgroundImage: "url('../src/assets/slider-01.jpg')" }} // Add your image path
-            >
+            <div className="banner-bg w-full h-[150px] md:h-[600px]">
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20"></div>
-
+                <div className='banner-bg-overlay'></div>
                 {/* Content */}
                 <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
-                    <h1 className="text-5xl text-white font-extrabold mb-4">PoroshMoni Hostel, Chattogram</h1>
-                    <p className="text-lg mb-6">
+                    <h1 className="text-3xl md:text-5xl text-white font-extrabold mb-4">PoroshMoni Hostel, Chattogram</h1>
+                    <p className="text-md md:text-lg mb-6">
                         Simplify hostel operations, track residents, and manage payments— all in one place.
                     </p>
                     <div className="flex w-full max-w-md join">

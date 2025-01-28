@@ -16,7 +16,7 @@ const MealCard = ({ meal }) => {
     // reaction.count, reviews.review_count,
 
     return (
-        <div className="card bg-base-100 w-96 shadow-xl group relative overflow-hidden">
+        <div className="card bg-base-100 w-[96%] lg:w-full mx-auto shadow-xl group relative overflow-hidden border border-gray-400">
             <figure className="relative">
                 <img
                     className="h-80 w-full transition-transform duration-300 group-hover:scale-110" // Scale on hover

@@ -66,7 +66,6 @@ const Home = () => {
             <MealsByCategory meals={meals}></MealsByCategory>
             <PopularMeals meals={meals} isLoading={isLoading} error={error}></PopularMeals>
             <Packages></Packages>
-
         </div>
     );
 };

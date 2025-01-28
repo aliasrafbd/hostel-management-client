@@ -16,7 +16,7 @@
 
 
 3. **Live URL** <br>
-   [https://food-sharing-26-12-24.netlify.app/](https://food-sharing-26-12-24.netlify.app/)
+   [https://hostel-management-28-01-24.netlify.app/](https://hostel-management-28-01-24.netlify.app/)
 
 
 4. **Key Features of my Project:**
