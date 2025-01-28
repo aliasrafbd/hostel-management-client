@@ -10,9 +10,9 @@
 
 
 2. **Admin Info** <br>
-   Admin Email: aliasrafchakoria@gmail.com
-   Admin Name: Ali Asraf
-   Password: 123456
+   Admin Email: aliasrafchakoria@gmail.com <br>
+   Admin Name: Ali Asraf <br>
+   Password: 123456 
 
 
 3. **Live URL** <br>
