@@ -16,7 +16,7 @@ const ServeMeals = () => {
         queryKey: ["servedMeals", currentPage, itemsPerPage, name, userEmail],
         queryFn: async () => {
             const response = await axiosSecure.get(
-                `http://localhost:5000/servedmeals?page=${currentPage}&size=${itemsPerPage}&name=${name}&userEmail=${userEmail}`)
+                `https://hostel-management-server-orcin.vercel.app/servedmeals?page=${currentPage}&size=${itemsPerPage}&name=${name}&userEmail=${userEmail}`)
                 return response.data;
             },
         keepPreviousData: true,
@@ -27,19 +27,19 @@ const ServeMeals = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        setCurrentPage(1); // Reset to first page for new search
+        setCurrentPage(1); 
         refetch();
     };
 
     const handleServe = async (mealId) => {
         try {
-            const response = await axiosSecure.patch(`http://localhost:5000/servedmeals/${mealId}`, {
+            const response = await axiosSecure.patch(`https://hostel-management-server-orcin.vercel.app/servedmeals/${mealId}`, {
                 status: "delivered",
             });
     
             if (response.status === 200) {
                 console.log("Meal status updated successfully.");
-                refetch(); // Refetch the meals to update the table
+                refetch(); 
             } else {
                 console.error("Failed to update meal status.");
             }
@@ -51,7 +51,6 @@ const ServeMeals = () => {
 
     return (
         <div>
-            {/* Search Form */}
             <form onSubmit={handleSearch} className="my-4 flex gap-4">
                 <input
                     type="text"
@@ -70,7 +69,6 @@ const ServeMeals = () => {
                 <button type="submit" className="btn btn-primary">Search</button>
             </form>
 
-            {/* Table with fixed height and overflow */}
             <div className="border rounded-lg shadow-lg h-[600px] overflow-y-auto">
                 <table className="table-auto w-full bg-white">
                     <thead className="bg-gray-200">
@@ -96,7 +94,7 @@ const ServeMeals = () => {
                                         <button
                                             className="btn btn-error btn-sm"
                                             onClick={() => handleServe(meal._id)}
-                                            disabled={meal.status === "delivered"} // Disable if already delivered
+                                            disabled={meal.status === "delivered"} 
                                         >
                                             {meal.status === "pending" ? "Serve" : "Delivered"}
                                         </button>
@@ -114,7 +112,6 @@ const ServeMeals = () => {
                 </table>
             </div>
 
-            {/* Pagination Controls */}
             <div className="flex justify-center items-center gap-4 mt-4">
                 <button
                     className={`btn btn-outline btn-sm ${currentPage === 1 && "btn-disabled"}`}

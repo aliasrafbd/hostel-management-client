@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../../providers/AuthProvider';
 
 const fetchPaymentsByEmail = async (email) => {
-  const response = await axios.get(`http://localhost:5000/payments/${email}`, {withCredentials: true});
+  const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/payments/${email}`, {withCredentials: true});
   return response.data.data; 
 };
 

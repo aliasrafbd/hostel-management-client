@@ -20,7 +20,7 @@ const Checkout = () => {
                 if (packageName === "gold") amount = 3000; // $30.00 USD
                 if (packageName === "platinum") amount = 4000; // $40.00 USD
 
-                const response = await fetch('http://localhost:5000/create-payment-intent', {
+                const response = await fetch('https://hostel-management-server-orcin.vercel.app/create-payment-intent', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

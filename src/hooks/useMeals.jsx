@@ -10,15 +10,15 @@ const useMeals = ({ search, category, minPrice, maxPrice, page, limit }) => {
         const fetchMeals = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get("http://localhost:5000/meals", {
+                const response = await axios.get("https://hostel-management-server-orcin.vercel.app/meals", {
                     params: { search, category, minPrice, maxPrice, page, limit }, 
                     
                 });
 
                 setData((prevData) => ({
                     data: page === 1
-                        ? response.data.data // Replace data if it's the first page
-                        : [...prevData.data, ...response.data.data], // Append new data
+                        ? response.data.data 
+                        : [...prevData.data, ...response.data.data], 
                     pagination: response.data.pagination,
                 }));
             } catch (err) {

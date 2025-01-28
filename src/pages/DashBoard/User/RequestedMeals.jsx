@@ -7,7 +7,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const fetchRequestedMeals = async (email) => {
-    const response = await axios.get(`http://localhost:5000/requestedmeals/${email}`, { withCredentials: true });
+    const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${email}`, { withCredentials: true });
     return response.data.requestedMeals || [];
 };
 
@@ -50,7 +50,7 @@ const RequestedMeals = () => {
                     try {
                         await axiosSecure.delete(`/requestedmeals/${id}`);
                         Swal.fire('Deleted!', 'Requested meals has been cancel.', 'success');
-                        refetch(); // Refetch meals after deletion
+                        refetch(); 
                     } catch (err) {
                         Swal.fire('Error', 'Failed to cancel the meal.', 'error');
                     }

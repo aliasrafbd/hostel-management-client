@@ -20,7 +20,7 @@ const LikeButton = ({ mealId, userEmails, initialReaction }) => {
 
         try {
             const response = await axios.put(
-                `http://localhost:5000/meals/${mealId}/like`,
+                `https://hostel-management-server-orcin.vercel.app/meals/${mealId}/like`,
                 { userEmail }
             );
 

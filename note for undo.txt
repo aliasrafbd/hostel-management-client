@@ -164,7 +164,7 @@ const UpdateMealModal = ({ meal, isOpen, onClose, onUpdate }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:5000/meals/${meal._id}`, formData); // Update meal
+            await axios.put(`https://hostel-management-server-orcin.vercel.app/meals/${meal._id}`, formData); // Update meal
             onUpdate(); // Refresh data
             onClose(); // Close modal
         } catch (error) {

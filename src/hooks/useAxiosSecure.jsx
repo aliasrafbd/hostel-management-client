@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../providers/AuthProvider";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://hostel-management-server-orcin.vercel.app',
   withCredentials: true
 });
 

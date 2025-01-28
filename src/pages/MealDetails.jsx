@@ -35,7 +35,7 @@ const MealDetails = () => {
     const handleUpdateRating = async (newUserRating) => {
 
         refetch();
-        const response = await axios.patch(`http://localhost:5000/meals/${_id}/rating`, { newUserRating });
+        const response = await axios.patch(`https://hostel-management-server-orcin.vercel.app/meals/${_id}/rating`, { newUserRating });
         
     };
 
