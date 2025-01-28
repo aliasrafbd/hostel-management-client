@@ -7,6 +7,8 @@ const DashBoard = () => {
 
     // TODO: get isAdmin value from the Database;
     const [isAdmin] = useAdmin();
+    
+    console.log(isAdmin);
 
     return (
         <div className='flex mx-auto gap-8'>

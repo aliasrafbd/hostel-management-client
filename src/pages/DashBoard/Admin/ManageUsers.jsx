@@ -18,7 +18,7 @@ const ManageUsers = () => {
             if (searchName) params.name = searchName;
             if (searchEmail) params.email = searchEmail;
 
-            const res = await axiosSecure.get('/users', { params, withCredentials: true});
+            const res = await axiosSecure.get('/users', { params});
             return res.data;
         },
     });

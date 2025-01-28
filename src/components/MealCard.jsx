@@ -54,7 +54,7 @@ const MealCard = ({ meal }) => {
                         </div>
                     </div>
                 </div>
-                <h2 className="text-center text-md font-extrabold">{title}</h2>
+                <h2 className="text-center p-8 text-md font-extrabold">{title}</h2>
                 <p className='pb-6'>{price}/-</p>
             </div>
         </div>

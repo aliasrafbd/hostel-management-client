@@ -23,7 +23,7 @@ const AllReviews = () => {
         queryFn: async ({ queryKey }) => {
             const [, currentPage, itemsPerPage] = queryKey;
             const response = await fetch(
-                `https://hostel-management-server-orcin.vercel.app/reviews?page=${currentPage}&size=${itemsPerPage}`
+                `http://localhost:5000/reviews?page=${currentPage}&size=${itemsPerPage}`
             );
             if (!response.ok) {
                 throw new Error("Failed to fetch meals.");

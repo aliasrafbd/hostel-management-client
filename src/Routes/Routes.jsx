@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
       {
         path: '/meal/:id',
         element: <MealDetails></MealDetails>,
-        loader: ({ params }) => fetch(`https://hostel-management-server-orcin.vercel.app/meals`)
+        loader: ({ params }) => fetch(`http://localhost:5000/meals`)
       },
       {
         path: '/upcomingmeals',
@@ -100,18 +100,18 @@ export const router = createBrowserRouter([
       {
         path: "allmeals",
         element: <AdminRoute><AllMeals></AllMeals></AdminRoute>,
-        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/mealscount'),
+        loader: () => fetch('http://localhost:5000/mealscount'),
       },
       {
         path: "/dashboard/meals/:id",
         element: <AdminRoute><UpdateMeal></UpdateMeal></AdminRoute>,
-        loader: ({ params }) => fetch(`https://hostel-management-server-orcin.vercel.app/meals`)
+        loader: ({ params }) => fetch(`http://localhost:5000/meals`)
         
       },
       {
         path: "allreviews",
         element: <AdminRoute><AllReviews></AllReviews></AdminRoute>,
-        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/mealscount'),
+        loader: () => fetch('http://localhost:5000/mealscount'),
       },
       {
         path: "manageusers",
@@ -120,12 +120,12 @@ export const router = createBrowserRouter([
       {
         path: "servemeals",
         element: <AdminRoute><ServeMeals></ServeMeals></AdminRoute>,
-        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/servemealscount'),
+        loader: () => fetch('http://localhost:5000/servemealscount'),
       },
       {
         path: "upcomingmeals",
         element: <AdminRoute><UpcomingMeals></UpcomingMeals></AdminRoute>,
-        loader: () => fetch('https://hostel-management-server-orcin.vercel.app/upcomingmealscount'),
+        loader: () => fetch('http://localhost:5000/upcomingmealscount'),
       },
 
     ]

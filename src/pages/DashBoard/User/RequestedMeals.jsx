@@ -7,7 +7,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const fetchRequestedMeals = async (email) => {
-    const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${email}`, { withCredentials: true });
+    const response = await axios.get(`http://localhost:5000/requestedmeals/${email}`);
     return response.data.requestedMeals || [];
 };
 

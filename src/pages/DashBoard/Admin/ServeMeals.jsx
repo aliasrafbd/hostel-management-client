@@ -14,7 +14,7 @@ const ServeMeals = () => {
         queryKey: ["servedMeals", currentPage, itemsPerPage, name, userEmail],
         queryFn: async () => {
             const response = await fetch(
-                `https://hostel-management-server-orcin.vercel.app/servedmeals?page=${currentPage}&size=${itemsPerPage}&name=${name}&userEmail=${userEmail}`
+                `http://localhost:5000/servedmeals?page=${currentPage}&size=${itemsPerPage}&name=${name}&userEmail=${userEmail}`
             );
             if (!response.ok) {
                 throw new Error("Failed to fetch meals.");
@@ -35,7 +35,7 @@ const ServeMeals = () => {
 
     const handleServe = async (mealId) => {
         try {
-            const response = await axios.patch(`https://hostel-management-server-orcin.vercel.app/servedmeals/${mealId}`, {
+            const response = await axios.patch(`http://localhost:5000/servedmeals/${mealId}`, {
                 status: "delivered",
             });
     
@@ -79,7 +79,7 @@ const ServeMeals = () => {
                         <tr>
                             <th className="py-2 px-4">#</th>
                             <th className="py-2 px-4">Meal Title</th>
-                            <th className="py-2 px-4">User Name</th>
+                            <th className="py-2 px-4">Requested User Name</th>
                             <th className="py-2 px-4">User Email</th>
                             <th className="py-2 px-4">Status</th>
                             <th className="py-2 px-4">Action</th>

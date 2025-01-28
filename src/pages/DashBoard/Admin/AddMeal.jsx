@@ -30,14 +30,11 @@ const AddMeal = () => {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-
-
     // Function to increment the notification count
     const incrementNotification = () => {
         console.log("Clicked for noti");
         setNotificationCount((prevCount) => prevCount + 1);
     };
-
 
     const {
         register,
@@ -83,7 +80,7 @@ const AddMeal = () => {
         }
         console.log(mealData);
 
-        const mealRes = await axiosSecure.post('/meals', mealData, {withCredentials:true})
+        const mealRes = await axiosSecure.post('/meals', mealData, {withCredentials: true})
         // show success message 
         if (mealRes.data.insertedId) {
             Swal.fire({
@@ -102,7 +99,7 @@ const AddMeal = () => {
     return (
         <div className='w-[90%] mx-auto my-6'>
             <SectionHeading title="Add a Meal"></SectionHeading>
-            <form onSubmit={handleSubmit(onSubmit)} className="md:grid space-y-2 md:space-y-0 block md:grid-cols-2">
+            <form onSubmit={handleSubmit(onSubmit)} className="md:grid space-y-2 md:space-y-0 block md:grid-cols-2 md:gap-4">
             
                 {/* Title */}
                 <div className=''>
@@ -117,7 +114,7 @@ const AddMeal = () => {
 
                 {/* Category */}
                 <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Category</label>
+                    <label className="block mb-2 md:mb-0 text-sm font-medium text-gray-700">Category</label>
                     <select defaultValue="default"
                         {...register("category", { required: "Category is required" })}
                         className="select select-bordered w-full"

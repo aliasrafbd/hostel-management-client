@@ -16,10 +16,6 @@ const MealDetails = () => {
     const [review, setReview] = useState('');
     const [message, setMessage] = useState('');
     const [isRatingClicked, setIsRatingClicked] = useState(false);
-    const [rate, setRate] = useState(0);
-
-    // const [reviewCount, setReviewCount] = useState(0);
-    // const [reviews, setReviews] = useState([]);
 
     const { user } = useContext(AuthContext);
 
@@ -34,58 +30,14 @@ const MealDetails = () => {
 
     console.log(data);
 
-    // const loadedMeals = useLoaderData();
-
-
-    // const [loadedMeal] = [...loadedMeals].filter(meal => meal._id == id);
-
-
     const { _id, price, rating, title, description, ingredients, reviews, reaction: { count, userEmails } } = data;
 
-
-    const handleUpdateRating = async (newRatingValue) => {
+    const handleUpdateRating = async (newUserRating) => {
         // Calculate the new average rating
 
-        console.log("new Rating value", newRatingValue);
-
-        let newAverageRating;
-        if (rate == 0) {
-            newAverageRating = (parseFloat(rate) + newRatingValue) / 1;
-        }
-        else {
-            newAverageRating = (parseFloat(rate) + newRatingValue) / 2;
-        }
-
-        // console.log(newAverageRating);
-        if (userEmails.includes(user?.email)) {
-            Swal.fire({
-                position: "top",
-                icon: "info",
-                title: `You already rated this meal`,
-                showConfirmButton: false,
-                timer: 1500
-            })
-            return;
-        }
-
-        try {
-            // Send a request to update the rating
-            const response = await axios.patch(`https://hostel-management-server-orcin.vercel.app/meals/${_id}/rating`, {
-                newRating: parseFloat(newAverageRating),
-
-            });
-            console.log("inside patch", newAverageRating);
-            console.log(response.data);
-
-            if (response.status === 200) {
-                if (!isRatingClicked) {
-                    setRate(newAverageRating);
-                    setIsRatingClicked(true); // Disable further rating after the first click
-                }
-            }
-        } catch (error) {
-            console.error('Error updating the rating:', error);
-        }
+        refetch();
+        const response = await axios.patch(`http://localhost:5000/meals/${_id}/rating`, { newUserRating });
+        
     };
 
     // Handle review submission
@@ -117,9 +69,6 @@ const MealDetails = () => {
         }
     };
 
-
-    console.log(count);
-
     if (!data) return <p>Loading meal details...</p>;
 
     return (
@@ -139,13 +88,13 @@ const MealDetails = () => {
                             }
                         </div>
                         <div className='flex gap-2 items-center justify-end'>
-                            <p>{rate?.toFixed(1)}
+                            <p>{rating?.toFixed(1)}
                             </p>
                             <ReactStars
 
-                                key={rate} // Use the updated rating state as the key
+                                key={rating} // Use the updated rating state as the key
                                 count={5}
-                                value={rate} // Use the updated rating state
+                                value={rating} // Use the updated rating state
                                 size={20}
                                 edit={false} // Make it read-only
                                 activeColor="#ddd700"
@@ -157,10 +106,12 @@ const MealDetails = () => {
                 <div className='w-1/2'>
                     <h1 className="text-3xl font-bold mb-4">{title}</h1>
 
-                    <p>Ingredients: {ingredients}</p>
-                    <p>Description: {description}</p>
-                    <p>Total Review: {reviews.review_count}</p>
-                    <p>Price: {price}</p>
+                    <p><span className='font-bold'>Ingredients:</span> <br /> {ingredients}</p>
+                    <br />
+                    <p><span className='font-bold'>Description:</span> <br /> {description}</p>
+                    <br />
+                    <p><span className='font-bold'>Total Review:</span> {reviews.review_count}</p>
+                    <p><span className='font-bold'>Price:</span> {price}</p>
                     {
                         user && <RequestButton
                             meal={data}
@@ -175,10 +126,10 @@ const MealDetails = () => {
             <div>
                 <div className='grid gap-6 grid-cols-1 md:grid-cols-2 mb-20 items-center justify-between'>
                     <div className={isRatingClicked ? 'hidden' : 'flex gap-2 items-center'}>
-                        <p>Rate <span className='font-bold text-orange-600'>{title}</span>:</p>
+                        <p>Put Rating for <span className='font-bold text-orange-600'>{title}</span>:</p>
                         <ReactStars
                             count={5}
-                            value={rate} // User's initial input value
+                            value={rating} // User's initial input value
                             onChange={handleUpdateRating}
                             size={30}
                             activeColor="#ffd799"

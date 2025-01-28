@@ -10,7 +10,7 @@ const AdminProfile = () => {
     const { data: adminData, isLoading, isError, error } = useQuery({
         queryKey: ['adminData'],
         queryFn: async () => {
-            const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`, { withCredentials: true });
+            const response = await axiosSecure.get(`/admin-data?adminEmail=${user?.email}`, {withCredentials:true});
             return response.data;
         },
         enabled: !!user?.email, // Ensure the query only runs if adminId is provided

@@ -10,9 +10,9 @@ const useMeals = ({ search, category, minPrice, maxPrice, page, limit }) => {
         const fetchMeals = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get("https://hostel-management-server-orcin.vercel.app/meals", {
+                const response = await axios.get("http://localhost:5000/meals", {
                     params: { search, category, minPrice, maxPrice, page, limit }, 
-                    withCredentials: true
+                    
                 });
 
                 setData((prevData) => ({

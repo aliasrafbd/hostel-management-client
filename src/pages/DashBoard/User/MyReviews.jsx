@@ -8,7 +8,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
 const fetchReviewsByEmail = async (email) => {
-    const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/reviews/${email}`, { withCredentials: true });
+    const response = await axios.get(`http://localhost:5000/reviews/${email}`);
     return response.data;
 };
 

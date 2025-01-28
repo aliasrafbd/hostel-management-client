@@ -6,7 +6,7 @@ import axios from 'axios';
 // Function to fetch user data by email
 const fetchUserByEmail = async (email) => {
     try {
-        const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/users/email/${email}`, {withCredentials: true});
+        const response = await axios.get(`http://localhost:5000/users/email/${email}`);
         return response.data;
     } catch (error) {
         throw error;

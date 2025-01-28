@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Fetch upcoming meals
 const fetchUpcomingMeals = async () => {
-    const response = await axios.get('https://hostel-management-server-orcin.vercel.app/upcomingmeals');
+    const response = await axios.get('http://localhost:5000/upcomingmeals');
     return response.data;
 };
 

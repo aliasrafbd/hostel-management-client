@@ -10,7 +10,7 @@ const MealsTable = () => {
 
 
     const [itemsPerPage, setItemsPerPage] = useState(10)
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(0)
 
     const { count } = useLoaderData();
     console.log(count);
@@ -24,7 +24,7 @@ const MealsTable = () => {
         queryFn: async ({ queryKey }) => {
             const [, { sortBy, page, size }] = queryKey; // Destructure queryKey
             const response = await axiosSecure.get(`/mealssorted?sort=${sortBy}&page=${currentPage}&size=${itemsPerPage}`, {
-                withCredentials: true,
+                
             });
             return response.data;
         },
