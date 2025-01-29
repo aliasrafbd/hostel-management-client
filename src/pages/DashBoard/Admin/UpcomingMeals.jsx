@@ -11,6 +11,9 @@ import { FcLike } from "react-icons/fc";
 import { AuthContext } from '../../../providers/AuthProvider';
 import usePremiumMember from '../../../hooks/usePremiumMember';
 import { BiSolidLike } from "react-icons/bi";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 const UpcomingMeals = () => {
     const { pathname } = useLocation();
@@ -20,8 +23,8 @@ const UpcomingMeals = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const {PremiumMember} = usePremiumMember();
-    const {notificationCount, setNotificationCount} = useContext(AuthContext);
+    const { PremiumMember } = usePremiumMember();
+    const { notificationCount, setNotificationCount } = useContext(AuthContext);
 
 
     const closeModal = () => setIsModalOpen(false);
@@ -48,21 +51,25 @@ const UpcomingMeals = () => {
             );
             return response.data;
         },
-        
-        refetchOnWindowFocus: false, 
+
+        refetchOnWindowFocus: false,
     });
 
 
     const { data: upcomingMealsAll = [], isLoading: isLoadingAllUpcoming, refetch: refetchAllUpcoming } = useQuery({
-        queryKey: ['upcomingmealsall'], 
+        queryKey: ['upcomingmealsall'],
         queryFn: async () => {
-            const response = await axiosSecure.get(`/upcomingmealsall`); 
+            const response = await axiosSecure.get(`/upcomingmealsall`);
             return response.data;
         },
-        
-        refetchOnWindowFocus: false, 
+
+        refetchOnWindowFocus: false,
     });
 
+    useEffect(() => {
+        // Initialize AOS
+        AOS.init();
+    }, []);
 
     const incrementNotification = () => {
         setNotificationCount((prevCount) => prevCount + 1);
@@ -84,7 +91,7 @@ const UpcomingMeals = () => {
             });
             incrementNotification();
             queryClient.invalidateQueries(['upcomingmeals']);
-            refetch(); 
+            refetch();
         },
     });
 
@@ -117,7 +124,7 @@ const UpcomingMeals = () => {
                 <>
 
                     <div className="flex flex-col h-full">
-                        
+
                         <div className="h-[500px] overflow-x-auto">
                             <table className="table w-full">
                                 <thead className='text-center'>
@@ -193,7 +200,9 @@ const UpcomingMeals = () => {
                 <div className="grid grid-cols-1 mb-6 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {upcomingMealsAll.map((meal) => (
                         <>
-                            <div className="card border border-gray-400 w-[95%] mx-auto">
+                            <div className="card border border-gray-400 w-[95%] mx-auto"
+                                data-aos="zoom-in"
+                            >
                                 <figure className="relative">
                                     <img
                                         className="h-80 w-full transition-transform duration-300 group-hover:scale-110" // Scale on hover

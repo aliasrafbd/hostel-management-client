@@ -68,7 +68,7 @@ export const router = createBrowserRouter([
       // user Routes 
       {
         path: "/dashboard",
-        element: <div className="text-center text-green-500 text-5xl my-32">Welcome to the Dashboard</div>
+        element: <div className="text-center text-green-500 text-5xl my-32">Welcome to the Dashboard <br /> of <br /> <span className="font-extrabold">Hostel Management System</span></div>
       },
       {
         path: "myprofile",

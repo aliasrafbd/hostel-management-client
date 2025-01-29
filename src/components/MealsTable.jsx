@@ -3,10 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 import { Link, useLoaderData } from 'react-router-dom';
+import axios from 'axios';
 
 const MealsTable = () => {
     const axiosSecure = useAxiosSecure();
-    const [sortBy, setSortBy] = useState('reaction'); // Default sort by "reaction"
+    const [sortBy, setSortBy] = useState('reaction'); 
 
     const [itemsPerPage, setItemsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(0)
@@ -17,26 +18,23 @@ const MealsTable = () => {
 
     const pages = [...Array(numberOfPages).keys()];
 
-    // Fetch meals with sorting using React Query
     const { data: meals = [], isLoading, isError, error, refetch } = useQuery({
-        queryKey: ['meals', { sortBy, currentPage, itemsPerPage }], // Include `sortBy`, `page`, and `size` in the query key
+        queryKey: ['meals', { sortBy, currentPage, itemsPerPage }], 
         queryFn: async ({ queryKey }) => {
-            const [, { sortBy, page, size }] = queryKey; // Destructure queryKey
-            const response = await axiosSecure.get(`/mealssorted?sort=${sortBy}&page=${currentPage}&size=${itemsPerPage}`);
+            const [, { sortBy, page, size }] = queryKey; 
+            const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/mealssorted?sort=${sortBy}&page=${currentPage}&size=${itemsPerPage}`);
             return response.data;
         },
-        staleTime: 10000, // Cache data for 10 seconds
-        refetchOnWindowFocus: false, // Prevent automatic refetch on window focus
-        enabled: !!sortBy && currentPage !== undefined && itemsPerPage !== undefined, // Only query if all parameters are valid
+        staleTime: 10000, 
+        refetchOnWindowFocus: false, 
+        enabled: !!sortBy && currentPage !== undefined && itemsPerPage !== undefined, 
     });
 
 
-    // Handle loading state
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    // Handle error state
     if (isError) {
         console.error('Error fetching meals:', error);
         Swal.fire({
@@ -46,11 +44,6 @@ const MealsTable = () => {
         });
         return null;
     }
-
-    // // Handle actions
-    // const handleView = (id) => {
-    //     Swal.fire('View functionality will go here!', `Meal ID: ${id}`, 'info');
-    // };
 
 
     const handleUpdate = (id) => {
@@ -87,9 +80,9 @@ const MealsTable = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axiosSecure.delete(`/mealssorted/${id}`);
+                    await axios.delete(`https://hostel-management-server-orcin.vercel.app/mealssorted/${id}`);
                     Swal.fire('Deleted!', 'The meal has been deleted.', 'success');
-                    refetch(); // Refetch meals after deletion
+                    refetch(); 
                 } catch (err) {
                     Swal.fire('Error', 'Failed to delete the meal.', 'error');
                 }
@@ -103,7 +96,7 @@ const MealsTable = () => {
                 <label className="mr-2">Sort By:</label>
                 <select
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)} // Automatically refetches due to queryKey
+                    onChange={(e) => setSortBy(e.target.value)} 
                     className="select select-bordered"
                 >
                     <option value="reaction">Likes</option>

@@ -13,7 +13,7 @@ const Footer = () => {
                     <Link to="/register">Register</Link>
                 </nav>
                 <nav>
-                    <h6 className="md:mb-0 lg:mb-4 md:mt-0 mb-4 mt-12 footer-title">Social</h6>
+                    <h6 className="md:mb-4 md:mt-0 mb-4 mt-12 footer-title">Social</h6>
                     <div className="grid grid-flow-col gap-4">
                         <a href='https://x.com/asrafali_bd'>
                             <svg

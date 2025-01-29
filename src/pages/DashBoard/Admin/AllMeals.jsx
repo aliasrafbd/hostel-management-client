@@ -7,6 +7,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import UpdateMealWithModal from '../../../components/UpdateMealWithModal';
 import MealCard from '../../../components/MealCard';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import the AOS styles
+
 
 const AllMeals = () => {
     const [search, setSearch] = useState("");
@@ -28,11 +31,11 @@ const AllMeals = () => {
         limit: 10,
     });
 
-    const { pathname } = useLocation(); 
+    const { pathname } = useLocation();
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/meals/search?q=${searchTerm}`, {withCredentials: true});
+            const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/meals/search?q=${searchTerm}`);
             setSearchResults(response.data);
         } catch (error) {
             console.error("Error fetching search results:", error);
@@ -50,6 +53,12 @@ const AllMeals = () => {
         return () => clearTimeout(timer);
     }, [search]);
 
+    useEffect(() => {
+        // Initialize AOS
+        AOS.init();
+    }, []);
+
+
     const loadMoreMeals = () => {
         if (pagination.page < pagination.totalPages) {
             setPage((prevPage) => prevPage + 1);
@@ -57,8 +66,8 @@ const AllMeals = () => {
     };
 
     const handleUpdateClick = (meal) => {
-        setSelectedMeal(meal); 
-        setModalOpen(true); 
+        setSelectedMeal(meal);
+        setModalOpen(true);
     };
 
     if (error) {

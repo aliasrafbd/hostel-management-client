@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ReactStars from 'react-rating-stars-component';
 import { FcLike } from "react-icons/fc";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 
 const MealCard = ({ meal }) => {
@@ -11,11 +13,18 @@ const MealCard = ({ meal }) => {
 
     const { _id, price, rating, reaction, reviews, title, image, category, ingredients } = meal;
 
+    useEffect(() => {
+        // Initialize AOS
+        AOS.init();
+    }, []);
+
     return (
-        <div className="card bg-base-100 w-[96%] lg:w-full mx-auto shadow-xl group relative overflow-hidden border border-gray-400">
+        <div className="card bg-base-100 w-[96%] lg:w-full mx-auto shadow-xl group relative overflow-hidden border border-gray-400"
+            data-aos="zoom-in"
+        >
             <figure className="relative">
                 <img
-                    className="h-80 w-full transition-transform duration-300 group-hover:scale-110" 
+                    className="h-80 w-full transition-transform duration-300 group-hover:scale-110"
                     src={image}
                     alt="Meal"
                 />

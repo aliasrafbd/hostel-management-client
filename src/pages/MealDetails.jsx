@@ -73,7 +73,7 @@ const MealDetails = () => {
             {/* Meal Details Section  */}
             <div className='grid grid-cols-1 md:grid-cols-2 mb-20 gap-12'>
                 <div>
-                    <img className='w-full rounded-lg' src={data.image} alt="" />
+                    <img className='w-full h-[300px] md:h-[370px] lg:h-[410px] rounded-lg' src={data.image} alt="" />
                     <div className='grid grid-cols-2'>
                         <div>
                             {
@@ -100,10 +100,10 @@ const MealDetails = () => {
                     </div>
                 </div>
 
-                <div className='w-1/2'>
+                <div className=''>
                     <h1 className="text-3xl font-bold mb-4">{title}</h1>
 
-                    <p><span className='font-bold'>Ingredients:</span> <br /> {ingredients}</p>
+                    <p className=''><span className='font-bold'>Ingredients:</span> <br /> {ingredients}</p>
                     <br />
                     <p><span className='font-bold'>Description:</span> <br /> {description}</p>
                     <br />
