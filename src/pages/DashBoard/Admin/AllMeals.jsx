@@ -15,6 +15,10 @@ const AllMeals = () => {
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [category, setCategory] = useState("");
+    const [sortBy, setSortBy] = useState("ascending");
+
+    const [sortByAscending, setSortByAscending] = useState();
+    const [sortByDescending, setSortByDescending] = useState();
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [page, setPage] = useState(1);
@@ -31,7 +35,22 @@ const AllMeals = () => {
         limit: 10,
     });
 
+    const meals = data?.data || [];
+    const [sortedMeals, setSortedMeals] = useState([...meals]);
+
     const { pathname } = useLocation();
+
+
+    // Sorting logic
+    useEffect(() => {
+        if (meals.length > 0) { // Ensure meals array is not empty
+            const sorted = [...meals].sort((a, b) => {
+                return sortBy === "ascending" ? a.price - b.price : b.price - a.price;
+            });
+            setSortedMeals(sorted);
+        }
+    }, [meals, sortBy]); // Depend on meals and sortBy
+
 
     const handleSearch = async () => {
         try {
@@ -42,7 +61,7 @@ const AllMeals = () => {
         }
     };
 
-    const meals = data?.data || [];
+
     const pagination = data?.pagination || {};
 
     useEffect(() => {
@@ -97,30 +116,16 @@ const AllMeals = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:px-0 px-2 gap-4">
-                        <div>
-                            <p className="my-4">Sort by Price:</p>
-                            <div className="flex gap-4">
-                                <input
-                                    type="number"
-                                    placeholder="Min Price"
-                                    className="input input-bordered w-[100px] lg:w-[200px]"
-                                    value={minPrice}
-                                    onChange={(e) => {
-                                        setPage(1);
-                                        setMinPrice(e.target.value);
-                                    }}
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Max Price"
-                                    className="input input-bordered w-[100px] lg:w-[200px]"
-                                    value={maxPrice}
-                                    onChange={(e) => {
-                                        setPage(1);
-                                        setMaxPrice(e.target.value);
-                                    }}
-                                />
-                            </div>
+                        <div className="mb-4">
+                            <label className="mr-2 font-semibold">Sort by Price:</label>
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="border p-2 rounded"
+                            >
+                                <option value="ascending">Low to High</option>
+                                <option value="descending">High to Low</option>
+                            </select>
                         </div>
 
                         <div>
@@ -169,13 +174,13 @@ const AllMeals = () => {
 
                     {meals.length > 0 ? (
                         <InfiniteScroll
-                            dataLength={meals.length}
+                            dataLength={sortedMeals.length}
                             next={loadMoreMeals}
                             hasMore={pagination.page < pagination.totalPages}
                             loader={<p className='text-center py-4'>Loading more meals...</p>}
                         >
                             <div className="grid grid-cols-1 mb-6 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {(searchResults.length ? searchResults : meals).map((meal) => (
+                                {(searchResults.length || sortedMeals.length ? sortedMeals : meals).map((meal) => (
                                     <MealCard key={meal._id} meal={meal}></MealCard>
                                 ))}
                             </div>

@@ -10,6 +10,10 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import the AOS styles
+import CustomerTestimonials from '../../components/CustomerTestimonials';
+import FAQ from '../../components/FAQ';
+import RecentMeals from '../../components/RecentMeals';
+import AboutUs from '../../components/AboutUs';
 
 
 const Home = () => {
@@ -61,7 +65,11 @@ const Home = () => {
             <Banner search={search} setSearch={setSearch}></Banner>
             <MealsByCategory meals={meals}></MealsByCategory>
             <PopularMeals meals={meals} isLoading={isLoading} error={error}></PopularMeals>
+            <RecentMeals meals={meals} isLoading={isLoading} error={error}></RecentMeals>
             <Packages></Packages>
+            <AboutUs></AboutUs>
+            <CustomerTestimonials></CustomerTestimonials>
+            <FAQ></FAQ>
         </div>
     );
 };

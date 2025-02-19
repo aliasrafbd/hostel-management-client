@@ -12,7 +12,7 @@ const ManageUsers = () => {
     const [searchEmail, setSearchEmail] = useState('');
 
     const { data: users = [], isLoading, error, refetch } = useQuery({
-        queryKey: ['users', searchName, searchEmail], // Include search params in the query key
+        queryKey: ['users', searchName, searchEmail], 
         queryFn: async () => {
             const params = {};
             if (searchName) params.name = searchName;

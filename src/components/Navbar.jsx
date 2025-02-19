@@ -27,6 +27,7 @@ const Navbar = () => {
         <NavLink to="/"><button><li className='py-1 px-3 font-semibold'>Home</li></button></NavLink>
         <NavLink to="/meals"><button><li className='py-1 px-3 font-semibold'>Meals</li></button></NavLink>
         <NavLink to="/upcomingmeals"><button><li className='py-1 px-3 font-semibold'>Upcoming Meals</li></button></NavLink>
+        <NavLink to="/contactus"><button><li className='py-1 px-3 font-semibold'>Contact Us</li></button></NavLink>
 
         {
             !user && (<NavLink to="/register"><button><li className='py-1 px-3 font-semibold'>Join Us</li></button></NavLink>)
@@ -37,7 +38,7 @@ const Navbar = () => {
     console.log("notification count from nav", notificationCount);
 
     return (
-        <div className="bg-black text-white">
+        <div className="bg-gray-100 sticky top-0 z-50">
             <div className="navbar mx-auto max-w-7xl px-4 lg:px-8 md:px-12">
                 {/* Navbar Start */}
                 <div className="navbar-start">
@@ -66,7 +67,7 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div className="flex flex-col justify-center items-center">
-                        <img className="max-w-lg w-32 h-32 mb-4" src={logo} alt="Logo" />
+                        <img className="max-w-lg w-24 h-24" src={logo} alt="Logo" />
                     </div>
                 </div>
 

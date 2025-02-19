@@ -174,7 +174,7 @@ const AddMealWithModal = ({ closeModal, refetch }) => {
                 </form>
             </div>
         </div>
-    );
+    ); 
 };
 
 export default AddMealWithModal;

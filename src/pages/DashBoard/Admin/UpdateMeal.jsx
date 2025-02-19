@@ -25,7 +25,7 @@ const UpdateMeal = () => {
         return <Loading></Loading>;
     }
     if (!meal) {
-        return <div>No meal found</div>; // Handle case where meal is not found
+        return <div>No meal found</div>; 
     }
     
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -44,13 +44,12 @@ const UpdateMeal = () => {
     
     const getBDTTime = () => {
         const now = new Date();
-        const utcOffset = now.getTimezoneOffset() * 60000; // Local offset in milliseconds
-        const bdtOffset = 6 * 60 * 60000; // BDT is UTC+6
+        const utcOffset = now.getTimezoneOffset() * 60000; 
+        const bdtOffset = 6 * 60 * 60000; 
         const bdtDate = new Date(now.getTime() + utcOffset + bdtOffset);
 
-        // Format date to YYYY-MM-DDTHH:mm
         const year = bdtDate.getFullYear();
-        const month = String(bdtDate.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+        const month = String(bdtDate.getMonth() + 1).padStart(2, "0"); 
         const day = String(bdtDate.getDate()).padStart(2, "0");
         const hours = String(bdtDate.getHours()).padStart(2, "0");
         const minutes = String(bdtDate.getMinutes()).padStart(2, "0");
@@ -60,12 +59,10 @@ const UpdateMeal = () => {
 
 
     const {_id, title, category, ingredients, description, price, image, postTime, distributorName, distributorEmail } = meal;
-    
-    // const formattedPostTime = data.postTime.replace("T", " "); // Replace "T" with a space
 
     const onSubmit = async (data) => {
 
-        const imageFile = data.image[0]; // Ensure this is a valid File object
+        const imageFile = data.image[0]; 
 
         const imageURL = await imageUpload(imageFile);
         console.log('Uploaded Image URL:', imageURL);

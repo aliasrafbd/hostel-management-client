@@ -17,35 +17,50 @@ const AdminProfile = () => {
     });
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className="text-center text-lg mt-10">Loading...</div>;
     }
 
     if (isError) {
         console.error('Error fetching admin data:', error);
-        return <div>Error: Failed to load admin data.</div>;
+        return <div className="text-center text-red-500 mt-10">Error: Failed to load admin data.</div>;
     }
 
     return (
-        <div className="card md:w-96 w-60 mx-auto mt-6 pt-20 bg-gradient-to-r from-blue-50 to-blue-100 shadow-2xl rounded-xl overflow-hidden">
-            <div className="flex flex-col items-center -mt-14">
-                <div className="w-28 h-28 rounded-full border-4 border-white shadow-md overflow-hidden">
-                    <img
-                        src={user?.photoURL}
-                        className="object-cover w-full h-full"
-                    />
+        <div className="max-w-5xl mx-auto p-6 mt-8">
+            {/* Admin Profile Details */}
+            <div className="p-6 flex flex-col md:flex-row items-center gap-6">
+                <div className="w-32 h-32 rounded-full border-4 border-blue-500 overflow-hidden">
+                    <img src={user?.photoURL} alt="Admin" className="object-cover w-full h-full" />
                 </div>
-                <div className="mt-4 text-center">
-                    <h2 className="text-xl font-bold text-gray-800">{user?.displayName}</h2>
-                    <p className="text-gray-500">{user?.email}</p>
+                <div className="text-center md:text-left">
+                    <h2 className="text-2xl font-bold text-gray-800">{user?.displayName}</h2>
+                    <p className="text-gray-600">{user?.email}</p>
+                    <p className="text-gray-700 mt-2 font-medium">Total Meals Added: 
+                        <span className="text-blue-600"> {adminData?.mealCount}</span>
+                    </p>
                 </div>
             </div>
-            <div className="card-body mt-4">
-                <p className="text-center font-bold text-lg text-gray-700">
-                    Meals Added: <span className="text-blue-600">{adminData?.mealCount}</span>
-                </p>
+
+            {/* Recent Activity Section */}
+            <div className="mt-10">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
+                {adminData?.recentMeals?.length > 0 ? (
+                    <div className="bg-white shadow-lg rounded-lg p-6">
+                        <ul className="space-y-4">
+                            {adminData.recentMeals.map((meal, index) => (
+                                <li key={index} className="border-b pb-3">
+                                    <p className="text-lg font-semibold">{meal.title}</p>
+                                    <p className="text-gray-600">Added on: {new Date(meal.postTime).toLocaleString()}</p>
+                                    <p className="text-gray-500">Category: {meal.category}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : (
+                    <p className="text-gray-600 text-center mt-4">No recent activity available.</p>
+                )}
             </div>
         </div>
-
     );
 };
 

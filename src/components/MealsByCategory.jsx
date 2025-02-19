@@ -22,7 +22,6 @@ const MealsByCategory = ({ meals }) => {
 
     console.log(meals);
 
-
     const breakfast = meals?.filter((meal) => meal.category === "Breakfast");
     const lunch = meals?.filter((meal) => meal.category === "Lunch");
     const dinner = meals?.filter((meal) => meal.category === "Dinner");

@@ -19,6 +19,7 @@ const DashBoard = () => {
                                 {/* Admin Dashboard  */}
                                 <li><NavLink to="manageusers">Manage Users</NavLink></li>
                                 <li><NavLink to="adminprofile">Admin Profile</NavLink></li>
+                                <li><NavLink to="overviewadmin">Overview</NavLink></li>
                                 <li><NavLink to="addmeal">Add Meal</NavLink></li>
                                 <li><NavLink to="allmeals">All Meals</NavLink></li>
                                 <li><NavLink to="allreviews">All Reviews</NavLink></li>

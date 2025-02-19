@@ -11,7 +11,9 @@ const MealCard = ({ meal }) => {
     const { pathname } = useLocation();
     console.log(pathname);
 
-    const { _id, price, rating, reaction, reviews, title, image, category, ingredients } = meal;
+    const { _id, price, rating, reaction, description, reviews, title, image, category, ingredients } = meal;
+
+    const shortDescription = description.split(' ').slice(0, 20).join(' ');
 
     useEffect(() => {
         // Initialize AOS
@@ -24,7 +26,7 @@ const MealCard = ({ meal }) => {
         >
             <figure className="relative">
                 <img
-                    className="h-80 w-full transition-transform duration-300 group-hover:scale-110"
+                    className="h-[300px] w-full transition-transform duration-300 group-hover:scale-110"
                     src={image}
                     alt="Meal"
                 />
@@ -38,29 +40,38 @@ const MealCard = ({ meal }) => {
                 }
 
             </figure>
-            <div className="px-2">
-                <div className="grid grid-cols-2 justify-around">
-                    <div className="flex gap-1 items-center">
-                        <span><FcLike /></span>
-                        <p>{reaction?.count}</p>
-                    </div>
-                    <div className="flex justify-end gap-2 items-center">
-                        <p>{rating?.toFixed(1)}</p>
-                        <div>
-                            <ReactStars
-                                key={rating}
-                                count={5}
-                                value={rating}
-                                size={20}
-                                edit={false}
-                                activeColor="#ddd700"
-                            />
+            <div className="flex flex-col px-2 min-h-[250px]">
+                <div>
+                    <div className="grid grid-cols-2 justify-around">
+                        <div className="flex gap-1 items-center">
+                            <span><FcLike /></span>
+                            <p>{reaction?.count}</p>
+                        </div>
+                        <div className="flex justify-end gap-2 items-center">
+                            <p>{rating?.toFixed(1)}</p>
+                            <div>
+                                <ReactStars
+                                    key={rating}
+                                    count={5}
+                                    value={rating}
+                                    size={20}
+                                    edit={false}
+                                    activeColor="#ddd700"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Make this div take up all available space */}
+                <div className="flex-grow mt-4">
+                    <h2>{shortDescription}...</h2>
+                </div>
+
                 <h2 className="text-center p-8 text-md font-extrabold">{title}</h2>
-                <p className='pb-6'>{price}/-</p>
+                <p className="pb-6">{price}/-</p>
             </div>
+
         </div>
 
 

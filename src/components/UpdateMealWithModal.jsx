@@ -22,12 +22,10 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
 
     const onSubmit = async (data) => {
         try {
-            // Upload the image and get the URL
             console.log(data);
             const imageURL = await imageUpload(data.image[0]);
             console.log(imageURL);
 
-            // Prepare the meal data
             const mealData = {
                 ...data,
                 price: parseFloat(data.price),
@@ -37,11 +35,9 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
                 rating: 0,
             };
 
-            // Send the data to the backend
             const response = await axiosSecure.post('/upcomingmeals', mealData);
 
             if (response.data.insertedId) {
-                // Show success alert
                 Swal.fire({
                     position: "top",
                     icon: "success",
@@ -50,12 +46,10 @@ const UpdateMealWithModal = ({ closeModal, refetch }) => {
                     timer: 1500,
                 });
 
-                // Refetch the meals list if applicable
                 if (refetch) {
                     refetch();
                 }
 
-                // Close the modal and reset the form
                 closeModal();
                 reset();
             }

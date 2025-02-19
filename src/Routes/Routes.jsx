@@ -23,6 +23,8 @@ import AdminRoute from "./AdminRoute";
 import Checkout from "../components/Checkout";
 import PrivateRoute from "./PrivateRoute";
 import UpdateMeal from "../pages/DashBoard/Admin/UpdateMeal";
+import ContactUs from "../pages/DashBoard/Admin/ContactUs";
+import Overview from "../pages/DashBoard/Admin/Overview";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: '/meals',
         element: <AllMeals></AllMeals>
+      },
+      {
+        path: '/contactus',
+        element: <ContactUs></ContactUs>
       },
       {
         path: '/meal/:id',
@@ -96,6 +102,10 @@ export const router = createBrowserRouter([
       {
         path: "adminprofile",
         element: <AdminRoute><AdminProfile></AdminProfile></AdminRoute>,
+      },
+      {
+        path: "overviewadmin",
+        element: <AdminRoute><Overview></Overview></AdminRoute>,
       },
       {
         path: "allmeals",
