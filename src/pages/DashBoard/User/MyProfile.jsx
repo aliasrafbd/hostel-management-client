@@ -32,11 +32,11 @@ const MyProfile = () => {
             try {
                 if (!userEmail) return;
 
-                // Fetch Requested Meals
+                
                 const mealsResponse = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${userEmail}`);
                 setRequestedMeals(mealsResponse.data);
 
-                // Fetch Reviews
+                
                 const reviewsResponse = await axios.get(`https://hostel-management-server-orcin.vercel.app/reviews/${userEmail}`);
                 setReviews(reviewsResponse.data);
 
@@ -51,11 +51,11 @@ const MyProfile = () => {
     if (error) return <p className="text-red-500">Error: {error.message}</p>;
     if (!singleUser) return <p>No user found!</p>;
 
-    // Stats Calculation
+    
     const totalRequestedMeals = requestedMeals.length;
     const totalReviews = reviews.length;
 
-    // Count meals by status
+    
     const statusCounts = requestedMeals.reduce((acc, meal) => {
         acc[meal.status] = (acc[meal.status] || 0) + 1;
         return acc;
@@ -66,7 +66,7 @@ const MyProfile = () => {
         value: statusCounts[status],
     }));
 
-    // Requested Meals by Category
+    
     const categoryCounts = requestedMeals.reduce((acc, meal) => {
         acc[meal.category] = (acc[meal.category] || 0) + 1;
         return acc;
@@ -77,7 +77,7 @@ const MyProfile = () => {
         count: categoryCounts[category],
     }));
 
-    // Reviews Over Time
+    
     const reviewsByDate = reviews.reduce((acc, review) => {
         const date = new Date(review.createdAt).toISOString().split("T")[0];
         acc[date] = (acc[date] || 0) + 1;
@@ -93,7 +93,7 @@ const MyProfile = () => {
 
     return (
         <div className="mx-auto mt-12">
-            {/* Profile Section */}
+            
             <div className="flex justify-between mb-8">
                 <div className="ml-4 text-left">
                     <img className="mx-auto h-24 w-24 rounded-full" src={user?.photoURL} alt="Profile" />
@@ -104,9 +104,9 @@ const MyProfile = () => {
                 </div>
             </div>
 
-            {/* Overview Section */}
+            
             <div className="p-6">
-                {/* Stats Cards */}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div className="bg-blue-500 text-white p-6 rounded-lg">
                         <h3 className="text-lg font-semibold">Requested Meals</h3>
@@ -118,9 +118,9 @@ const MyProfile = () => {
                     </div>
                 </div>
 
-                {/* Charts Section */}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Pie Chart: Requested Meals by Status */}
+                    
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="text-lg font-semibold mb-4">Requested Meals Status</h3>
                         <ResponsiveContainer width="100%" height={300}>
@@ -136,7 +136,7 @@ const MyProfile = () => {
                         </ResponsiveContainer>
                     </div>
 
-                    {/* Bar Chart: Meals by Category */}
+                    
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="text-lg font-semibold mb-4">Meals by Category</h3>
                         <ResponsiveContainer width="100%" height={300}>
@@ -150,7 +150,7 @@ const MyProfile = () => {
                     </div>
                 </div>
 
-                {/* Reviews Over Time Chart */}
+                
                 <div className="bg-white p-6 rounded-lg shadow-md mt-6">
                     <h3 className="text-lg font-semibold mb-4">Reviews Over Time</h3>
                     <ResponsiveContainer width="100%" height={300}>
