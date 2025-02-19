@@ -1,14 +1,24 @@
 # Hostel Management System
 
+
+<div align="center">
+  <img height="450" width="850" src="https://raw.githubusercontent.com/aliasrafbd/hostel-management-client/refs/heads/main/src/assets/project-img.png"  />
+</div>
+
+
 ## 🌟 Overview
 Hostel Management System is a web application that allows users to register, browse meals, request meals, and interact with the system. Admins can manage users, meals, and meal requests. The platform also supports premium membership via online payments.
+
+
 
 🔗 **[Live Project](https://hostel-management-28-01-24.netlify.app/)**  
 
 ---
 
 ## 📸 Screenshot
-*(Include a screenshot of the project here, if available.)*
+<div align="center">
+  <img height="450" width="850" src="https://raw.githubusercontent.com/aliasrafbd/hostel-management-client/refs/heads/main/src/assets/project-img.png"  />
+</div>
 
 ---
 
