@@ -54,7 +54,6 @@ const AddMeal = () => {
         console.log(data);
 
         const { price, image, ...newData } = data;
-        console.log(newData);
 
         const reaction = {
             count: 0,
