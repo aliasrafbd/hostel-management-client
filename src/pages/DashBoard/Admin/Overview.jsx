@@ -31,7 +31,7 @@ const Overview = () => {
         <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">Dashboard Overview</h2>
 
-            {/* Stats Cards */}
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="bg-blue-500 text-white p-6 rounded-lg shadow-md">
                     <h3 className="text-lg font-semibold">Total Meals</h3>
@@ -47,9 +47,9 @@ const Overview = () => {
                 </div>
             </div>
 
-            {/* Charts Section */}
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Bar Chart: Meals by Category */}
+                
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-lg font-semibold mb-4">Meals by Category</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -62,7 +62,7 @@ const Overview = () => {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Pie Chart: Reactions Distribution */}
+                
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-lg font-semibold mb-4">Reactions Distribution</h3>
                     <ResponsiveContainer width="100%" height={300}>
