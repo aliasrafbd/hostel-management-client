@@ -1,41 +1,55 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../providers/AuthProvider';
 import SectionHeading from '../../../components/SectionHeading';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import Loading from '../../../components/Loading';
 
-const fetchRequestedMeals = async (email) => {
-    const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${email}`, { withCredentials: true });
-    return response.data.requestedMeals || [];
-};
+// const fetchRequestedMeals = async (userEmail) => {
+
+//     const response = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${userEmail}`);
+//     return response.data.requestedMeals || [];
+// };
 
 const RequestedMeals = () => {
     const { user } = useContext(AuthContext);
+
+    const [meals, setMeals] = useState();
+    const [loading, setLoading] = useState(true);
 
     const axiosSecure = useAxiosSecure();
     
     const userEmail = user?.email;
 
-    const { data: meals = [], isLoading, error, refetch } = useQuery({
-        queryKey: ['requestedMeals', userEmail],
-        queryFn: () => fetchRequestedMeals(userEmail),
-        enabled: !!userEmail,
-    });
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!userEmail) return;
+
+                // Fetch Requested Meals
+                const mealsResponse = await axios.get(`https://hostel-management-server-orcin.vercel.app/requestedmeals/${userEmail}`);
+                setMeals(mealsResponse.data);
+                setLoading(false);
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
+    }, [userEmail]);
 
 
     const handleCancel = (mealId) => {
         console.log(`Cancel meal with ID: ${mealId}`);
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
+    if (loading) {
+        return <Loading></Loading>
     }
 
-    if (error) {
-        return <div className="text-red-500">{error.response?.data.message || 'Failed to fetch requested meals'}</div>;
-    }
+    console.log(meals);
 
     const handleDeleteReqMeal = (id) => {
             Swal.fire({

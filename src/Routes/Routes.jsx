@@ -25,6 +25,7 @@ import PrivateRoute from "./PrivateRoute";
 import UpdateMeal from "../pages/DashBoard/Admin/UpdateMeal";
 import ContactUs from "../pages/DashBoard/Admin/ContactUs";
 import Overview from "../pages/DashBoard/Admin/Overview";
+import UserOverview from "../pages/DashBoard/User/UserOverview";
 
 export const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
       {
         path: "requestedmeals",
         element: <PrivateRoute><RequestedMeals></RequestedMeals></PrivateRoute>
+      },
+      {
+        path: "useroverview",
+        element: <PrivateRoute><UserOverview></UserOverview></PrivateRoute>
       },
       {
         path: "myreviews",

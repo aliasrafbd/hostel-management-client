@@ -4,7 +4,9 @@ import { AuthContext } from '../providers/AuthProvider';
 import { easeOut, motion } from "framer-motion";
 import logo from "../../src/assets/poroshmoni-logo.png"
 import { FaUser } from "react-icons/fa";
+import { Menu, Sun, Moon } from "lucide-react";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import { ThemeContext } from './ThemeProvider';
 
 
 const Navbar = () => {
@@ -13,6 +15,8 @@ const Navbar = () => {
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+    const { theme, toggleTheme } = useContext(ThemeContext);
+    
 
     const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
     const closeDropdown = () => setIsDropdownOpen(false);
@@ -22,6 +26,7 @@ const Navbar = () => {
         setNotificationCount((prevCount) => prevCount + 1);
     };
 
+    
     const Links = (<>
 
         <NavLink to="/"><button><li className='py-1 px-3 font-semibold'>Home</li></button></NavLink>
@@ -90,8 +95,14 @@ const Navbar = () => {
                 {/* Navbar End */}
                 <div className="navbar-end">
 
+                    <div className='flex items-center justify-center'>
+                        <button onClick={toggleTheme} className="p-2">
+                            {theme === "dark" ? <Sun size={24} /> : <Moon size={24} />} {/* Theme Toggle */}
+                        </button>
+                    </div>
+
                     <div className="flex gap-4 justify-center items-center">
-                       
+
                         {user ? (
                             <div className="relative">
                                 <img

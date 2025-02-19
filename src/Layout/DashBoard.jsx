@@ -31,6 +31,7 @@ const DashBoard = () => {
                                 {/* User Dashboard  */}
                                 <li><NavLink to="myprofile">My Profile</NavLink></li>
                                 <li><NavLink to="requestedmeals">Requested Meals</NavLink></li>
+                                <li><NavLink to="useroverview">Overview</NavLink></li>
                                 <li><NavLink to="myreviews">My Reviews</NavLink></li>
                                 <li><NavLink to="paymenthistory">Payment History</NavLink></li>
 
